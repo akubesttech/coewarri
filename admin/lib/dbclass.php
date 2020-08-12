@@ -70,6 +70,8 @@ try {
   die;
 }
 define('SUDO_M', "xculp8_edu2019#,!");
+define('ROOTNO', "/");
+
 /*
 define('SERVER', 'localhost');
 define('USERNAME', 'root');
