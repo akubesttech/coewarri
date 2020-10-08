@@ -878,8 +878,8 @@ while($row_camt = mysqli_fetch_array($queryf)){
     if($gp2  > 0){ return $cgpa = round($gp + $gp2 / 2,2); }else{ return $cgpa = $gp; }
 }
 
- function getAcastatus($statnum)
-{ if($statnum > 0){
+  function getAcastatus($statnum ="",$n = "")
+{  if(empty($n)){
     if ($statnum==1){ return "Active"; }else if($statnum==2){return "Graduated";
   }else if($statnum==3){ return "Defered";}else if($statnum==4){ return "Expelled";}else if($statnum==5){ return "Suspended";}
   else if($statnum==6){ return "Transfered";}else if($statnum==7){ return "Withdrawn";}else if($statnum==8){ return "Repeat";}else if($statnum==0){ return "Active";}
