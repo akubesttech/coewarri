@@ -14,8 +14,8 @@ session_destroy();
 unset($_SESSION["select_pro"]);
 unset($_SESSION["s_elect2"]);
 //header('location:../UserLogin.php');
-header("location:".host()."Userlogin.php");
-
+//header("location:".host()."Userlogin.php");
+redirect(host()."Userlogin.php");
 //	if (isset($_SESSION['id'])) {
 	//	unset($_SESSION['id']);
 		//session_unregister('hlbank_user');

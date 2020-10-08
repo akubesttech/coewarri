@@ -4,7 +4,7 @@ define('SERVER', 'localhost');
 define('USERNAME', 'smartdel_warrismart');
 define('PASSWORD', 'warrismart_2019j#');
 define('DATABASE', 'smartdel_warrismartdb');
-//define('t_gate', 'sk_test_5a19822c308f7d12f9f64f19cecac63796ec6816');
+define('t_gate', 'sk_live_acc1833e651d4a7d3a2a065dd9ddb5e518b55764');//
 define('t_gate', 'sk_test_f3f8b7eca038827ef24ad9190a83b94ea2bdd6bc');
 
 class Database
