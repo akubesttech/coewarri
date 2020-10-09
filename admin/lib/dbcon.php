@@ -865,8 +865,8 @@ return $nameclass2;
 }
 //sessional CGPA
 function getcgpa($s_id,$prog,$sess,$lev){ $tp = 0; $cu = 0; $tp2 =0; $cu2 =0;
-$queryf = mysqli_query(Database::$conn,"Select Distinct course_code,c_unit,session,semester,total from results WHERE student_id = '".trim($s_id)."' and session = '".$sess."' and level ='".$lev."' and semester = 'First' and total > 0  group BY course_code ") or die(mysqli_error($conn)); $gp=0;
- $querys = mysqli_query(Database::$conn,"Select Distinct course_code,c_unit,session,semester,total from results WHERE student_id = '".trim($s_id)."' and session = '".$sess."' and level ='".$lev."' and semester = 'Second' and total > 0  group BY course_code ") or die(mysqli_error($conn)); $gp2=0;
+$queryf = mysqli_query(Database::$conn,"Select Distinct course_code,c_unit,session,semester,total from results WHERE student_id = '".trim($s_id)."' and session = '".$sess."' and level ='".$lev."' and semester = 'First' and exam > 0  group BY course_code ") or die(mysqli_error($conn)); $gp=0;
+ $querys = mysqli_query(Database::$conn,"Select Distinct course_code,c_unit,session,semester,total from results WHERE student_id = '".trim($s_id)."' and session = '".$sess."' and level ='".$lev."' and semester = 'Second' and exam > 0  group BY course_code ") or die(mysqli_error($conn)); $gp2=0;
 while($row_camt = mysqli_fetch_array($queryf)){
     $gp1 = gradpoint($row_camt['total'],$prog) * $row_camt['c_unit']; $tp += $gp1 ; $cu += $row_camt['c_unit'];
   }

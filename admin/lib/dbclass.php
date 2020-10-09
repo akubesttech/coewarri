@@ -71,6 +71,7 @@ try {
 }
 define('SUDO_M', "xculp8_edu2019#,!");
 define('ROOTNO', "/");
+define('showfullresult', 'no'); // display full result : yes and not full result no (letter case as specified (yes/no))
 
 /*
 define('SERVER', 'localhost');
