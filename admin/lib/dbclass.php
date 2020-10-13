@@ -1,11 +1,11 @@
 <?php
 define('DB_DRIVER', 'mysql');
 define('SERVER', 'localhost');
-define('USERNAME', 'smartdel_warrismart');
+define('USERNAME', 'deltasma_warrismart');
 define('PASSWORD', 'warrismart_2019j#');
-define('DATABASE', 'smartdel_warrismartdb');
+define('DATABASE', 'deltasma_warrismartdb');
 define('t_gate', 'sk_live_acc1833e651d4a7d3a2a065dd9ddb5e518b55764');//
-define('t_gate', 'sk_test_f3f8b7eca038827ef24ad9190a83b94ea2bdd6bc');
+//define('t_gate', 'sk_test_f3f8b7eca038827ef24ad9190a83b94ea2bdd6bc');
 
 class Database
 {
