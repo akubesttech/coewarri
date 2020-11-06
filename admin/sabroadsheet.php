@@ -26,6 +26,7 @@ $salot_dept = $_POST['dept1'];
 $semester = $_POST['semester'];
 $salot_los = $_POST['los'];
 $salot_session = $_POST['session'];
+$sfacu = $_POST['fac1'];
 //$result_alldept=mysqli_query($condb,"SELECT * FROM results WHERE session ='".safee($condb,$salot_session)."' and dept ='".safee($condb,$salot_dept)."' and level ='".safee($condb,$salot_los)."' and semester ='".safee($condb,$semester)."'");
 $result_alldept=mysqli_query($condb,"SELECT * FROM results WHERE dept ='".safee($condb,$salot_dept)."' and session ='".safee($condb,$salot_session)."' and  level ='".safee($condb,$salot_los)."' ");
 $num_alldept = mysqli_num_rows($result_alldept);
@@ -36,8 +37,10 @@ message("ERROR: No Result Annual Broad Sheet Found for ".getdeptc($salot_dept)."
  redirect('Result_am.php?view=ras');
 }else{
 	$_SESSION['vsession']=$salot_session;
-	$_SESSION['los']=$salot_los;
-echo "<script>window.location.assign('resultsummary.php?Schd=".($salot_dept)."&sec=".($salot_session)."&lev=".($salot_los)."');</script>";}
+	$_SESSION['bfac']=$sfacu;
+//echo "<script>window.location.assign('resultsummary.php?Schd=".($salot_dept)."&sec=".($salot_session)."&lev=".($salot_los)."');</script>";
+echo "<script>window.location.assign('resultsummary_p.php?Schd=".($salot_dept)."&sec=".($salot_session)."&lev=".($salot_los)."');</script>";
+}
 
 }//}$_SESSION['insidtime'] = rand();
 ?>
@@ -74,9 +77,7 @@ while($rsblocks = mysqli_fetch_array($resultblocks))
                       
   <div class="col-md-5 col-sm-5 col-xs-12 form-group has-feedback"><label for="heard">Academic Session</label>
 <select class="form-control"   name="session" id="session"  required="required"><option value="">Select Session</option>
-<?php  $resultsec = mysqli_query($condb,"SELECT * FROM session_tb  ORDER BY session_name ASC");while($rssec = mysqli_fetch_array($resultsec))
-{echo "<option value='$rssec[session_name]'>$rssec[session_name]</option>";	}
-?></select></div>
+<?php echo fill_sec(); ?></select></div>
                  <div class="col-md-5 col-sm-5 col-xs-12 form-group has-feedback">
 	<label for="heard">Level </label><select class="form-control" name="los" id="los" required >
 <option value="">Select Level</option><?php 

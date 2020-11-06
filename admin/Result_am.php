@@ -1,7 +1,7 @@
 
 <?php  include('header.php'); ?>
 <?php include('session.php'); ?>
-<?php 	$status = FALSE;
+<?php /*	$status = FALSE;
 if ( authorize($_SESSION["access3"]["rMan"]["apc"]["create"]) || 
 authorize($_SESSION["access3"]["rMan"]["apc"]["edit"]) || 
 authorize($_SESSION["access3"]["rMan"]["apc"]["view"]) || 
@@ -12,13 +12,16 @@ authorize($_SESSION["access3"]["rMan"]["apc"]["delete"]) ) {
 //die("You dont have the permission to access this page");
 message("You don't have the permission to access this page", "error");
 		        redirect('./'); 
-} ?>	
+}*/ ?>	
 		    	
  <?php include('admin_slidebar.php'); ?>
     <?php include('navbar.php') ?>
       
   <?php $get_RegNo = isset($_GET['userId']) ? $_GET['userId'] : '';
-  $dep1 = $_GET['Schd']; $sec1 = $_GET['sec']; $los = $_GET['slos'];
+  $dep1 = isset($_GET['Schd']) ? $_GET['Schd'] : '';
+  $sec1 = isset($_GET['sec']) ? $_GET['sec'] : '';
+  $los = isset($_GET['slos']) ? $_GET['slos'] : '';
+  //$dep1 = $_GET['Schd']; $sec1 = $_GET['sec']; $los = $_GET['slos'];
  if(empty($dep1)){ $links = "Result_am.php?view=caprove";}else{ $links = "Result_am.php?view=caprove&dlist&userId=".($get_RegNo)."&Schd=".$dep1."&sec=".$sec1."&slos=".$los;}
 $links2 = "Result_am.php?view=caprove&userId=".($get_RegNo)."&Schd=".$dep1."&sec=".$sec1."&slos=".$los;
 

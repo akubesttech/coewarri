@@ -3,11 +3,8 @@
                   message("ERROR:  No Programme Select,Please Select a Programme and continue.", "error");
 		       redirect('new_apply.php?view=spro');
 						}
-$searchp = $_GET['q'];
-$sreg = $_GET['sreg'];
-$gsec=$_GET['xsec'];
-$gdop= $_GET['xdop']; 
-$plevel= $_GET['xlev'];
+$searchp =  isset($_GET['q']) ? $_GET['q'] : '';
+
 				$serial=1;			?>
  <div class="alert alert-info alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span>
@@ -37,14 +34,16 @@ echo "Monthly Report (s)";}if($searchp == "qp3"){echo "Quaterly Report (s)";}if(
 									 $('#delete').tooltip('hide'); 	 $('#delete1').tooltip('hide'); $('#delete2').tooltip('hide');
 									 });
 									</script>
-										<?php //include('modal_delete.php'); ?>
-										<h1 style="color:black;font-size:35px;text-shadow: 1px 0px #0000FF;" > <center> <?php echo $schoolNe ; ?></center></h1>
+		<?php $existsop = imgExists($rowp['Logo']); //include('modal_delete.php'); ?>
+	<center><img width="100" height="70" id="Picture 1" src="   <?php  if ($existsop > 0 ){ print $rowp['Logo']; }else{ print "uploads/NO-IMAGE-AVAILABLE.jpg";} ?>  "  ></center>
+			<h2 style="color:black;font-size:35px;text-shadow: 1px 0px #0000FF;" > <center> <?php echo $schoolNe ; ?></center></h2>
 <div class="panel-heading" style="color:blue;font-size:15px;padding: 9px 6px 9px 0px;" id="ccc3"><b> <center><font size='5px'>
 <?php 
-$sreg = $_GET['sreg'];
-$gsec=$_GET['xsec'];
-$gdop= $_GET['xdop']; 
-$plevel= $_GET['xlev'];
+$sreg =  isset($_GET['sreg']) ? $_GET['sreg'] : '';
+$gsec = isset($_GET['xsec']) ? $_GET['xsec'] : '';
+$gdop=  isset($_GET['xdop']) ? $_GET['xdop'] : '';
+$plevel= isset($_GET['xlev']) ? $_GET['xlev'] : '';
+
 $origDate = $gdop;
  $date = str_replace('/', '-', $origDate );
 $newDate = date("Y-m-d", strtotime($date));

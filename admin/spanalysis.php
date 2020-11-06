@@ -25,7 +25,9 @@ $salot_los = $_POST['los'];
 $salot_session = $_POST['session']; $salot_fac = $_POST['fac1'];
 
 //$result_alldept=mysqli_query($condb,"SELECT * FROM results WHERE session ='".safee($condb,$salot_session)."' and dept ='".safee($condb,$salot_dept)."' and level ='".safee($condb,$salot_los)."' and semester ='".safee($condb,$semester)."'");
-$result_alldept=mysqli_query($condb,"SELECT * FROM results WHERE dept ='".safee($condb,$salot_dept)."' and session ='".safee($condb,$salot_session)."' and  level ='".safee($condb,$salot_los)."' and semester ='".safee($condb,$semester)."'");
+$result_alldeptp = "SELECT * FROM results WHERE dept ='".safee($condb,$salot_dept)."' and session ='".safee($condb,$salot_session)."' and  level ='".safee($condb,$salot_los)."'"; 
+if($semester != null){ $result_alldeptp.= " and semester ='".safee($condb,$semester)."'"; }
+$result_alldept = mysqli_query($condb,$result_alldeptp);
 $num_alldept = mysqli_num_rows($result_alldept);
 //	$_SESSION['vsession']=$salot_session;
 
@@ -71,9 +73,7 @@ while($rsblocks = mysqli_fetch_array($resultblocks))
                       
   <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback"><label for="heard">Academic Session</label>
 <select class="form-control"   name="session" id="session"  required="required"><option value="">Select Session</option>
-<?php  $resultsec = mysqli_query($condb,"SELECT * FROM session_tb  ORDER BY session_name ASC");while($rssec = mysqli_fetch_array($resultsec))
-{echo "<option value='$rssec[session_name]'>$rssec[session_name]</option>";	}
-?></select></div>
+<?php echo fill_sec(); ?></select></div>
                  <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
 	<label for="heard">Level </label><select class="form-control" name="los" id="los" required >
 <option value="">Select Level</option><?php 
@@ -81,7 +81,7 @@ $resultsec2 = mysqli_query($condb,"SELECT * FROM level_db where prog = '$class_I
 while($rssec2 = mysqli_fetch_array($resultsec2)){echo "<option value='$rssec2[level_order]'>$rssec2[level_name]</option>";	
 }?></select> </div>
 <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
-					  <label for="heard">Semester </label><select name='semester' id="semester" class="form-control" required>
+					  <label for="heard">Semester <font color="red">(Optional)</font> </label><select name='semester' id="semester" class="form-control" >
 <option value="">Select Semester</option><option value="First">First</option><option value="Second">Second</option></select> </div>
                     
                       

@@ -56,9 +56,7 @@ while($rsproe = mysqli_fetch_array($resultproe)){echo "<option value='$rsproe[pr
 						  	  <label for="heard">Academic Session *</label>
 							   <select class="form-control"   name="session" id="session" required >
   <option value="">Select Session</option>
-<?php  $resultsec = mysqli_query($condb,"SELECT * FROM session_tb  ORDER BY session_name ASC");
-while($rssec = mysqli_fetch_array($resultsec)){ echo "<option value='$rssec[session_name]'>$rssec[session_name]</option>";	}
-?></select></div>
+<?php echo fill_sec(); ?></select></div>
        
  <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
 						  	  <label for="heard">Payment Date</label>

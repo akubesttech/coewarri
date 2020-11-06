@@ -6,7 +6,9 @@ define('PASSWORD', 'warrismart_2019j#');
 define('DATABASE', 'deltasma_warrismartdb');
 define('t_gate', 'sk_live_acc1833e651d4a7d3a2a065dd9ddb5e518b55764');//
 //define('t_gate', 'sk_test_f3f8b7eca038827ef24ad9190a83b94ea2bdd6bc');
-
+//other creaditials 
+define('t_ACCTS', ''); //for school
+define('t_ACCTB', ''); // for Bisapp
 class Database
 {
 
