@@ -49,8 +49,8 @@ $query2_hod = "select * from payment_tb where prog = '".safee(Database::$conn,$p
 if($ist =="1" && $get_dep == "1"){$query2_hod .= " AND  paid_amount > '".safee(Database::$conn,$amper)."' ";}
 if($ist =="2" && $get_dep == "1"){$query2_hod .= " AND  paid_amount > '".safee(Database::$conn,$amper2)."' ";}
 if($ist =="3" && $get_dep == "1"){$query2_hod .= " AND  paid_amount < '".safee(Database::$conn,$amper2)."' ";}
-if(($get_dep) == "4"){$query2_hod .= " GROUP BY app_no";}else{
-$query2_hod .= " GROUP BY stud_reg ";}
+if(($get_dep) == "4"){$query2_hod .= " ORDER BY app_no";}else{
+$query2_hod .= " ORDER BY stud_reg ";}
 $qerynp = mysqli_query(Database::$conn,$query2_hod)or die(mysqli_error($condb));
 $count_st1 = mysqli_num_rows($qerynp); 
 $viewf_q = mysqli_query(Database::$conn,"select * from fshop_tb where  ftype = '".safee(Database::$conn,$pro)."'  AND fdate_paid BETWEEN '".safee(Database::$conn,$newDate)."' AND '".safee(Database::$conn,$newDate2)."' and fpay_status ='1' ")or die(mysqli_error($condb));
