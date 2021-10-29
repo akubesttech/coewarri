@@ -89,8 +89,8 @@ if($coursstatus > 0){  $courses_status = "Compulsory";}else{  $courses_status = 
                          <th>NAME OF STUDENTS</th>
                           <th>SCRIPT NUMBER</th>
                         <th>SIGN</th>
+                        <th>C.A</th>
                           <th>EXAM SCORE</th>
-                         <th>C.A</th> 
                          <th>TOTAL </th>
                          <th>GRADE </th>
                         </tr>
@@ -105,7 +105,7 @@ $i = "0";
 while($row_utme = mysqli_fetch_array($getfirst_query)){
 
 if ($i%2) {$classo1 = 'row1';} else {$classo1 = 'row2';}$i += 1;
-$new_a_id = $row_utme['stud_id'];
+//$new_a_id = $row_utme['stud_id'];
 $viewreg_query = mysqli_query($condb,"select DISTINCT lect_approve  from coursereg_tb WHERE sregno = '".safee($condb,$regen)."' AND c_code = '".safee($condb,$row_utme['c_code'])."' and lect_approve = '1' ")or die(mysqli_error($condb));
 ?>     
                         <tr class="<?php echo $classo1; ?>">
@@ -121,8 +121,8 @@ $viewreg_query = mysqli_query($condb,"select DISTINCT lect_approve  from courser
                          <td><?php //echo getlevel($row_utme['level'],$student_prog); ?></td>
                          <td width="120">
 <?php //echo $row_utme['session']; ?>	</td>
-<td style="text-align:justify;"><?php echo $status; ?></td>
-<td style="text-align:justify;"><?php echo $status; ?></td>
+<td style="text-align:justify;"><?php //echo $status; ?></td>
+<td style="text-align:justify;"><?php //echo $status; ?></td>
                         </tr>
                     <?php } ?>
  

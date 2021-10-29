@@ -17,12 +17,12 @@
         </div>
         <div class="col-xs-12 col-sm-4 quick-links">
             <!--<h2><a href="#">Need More Information?</a></h2> --!>
-<h2><a href="post.php?view=Program">Our School Programmes</a></h2>
+<h2><a href="prog.php?view=Program">Our School Programmes</a></h2>
             <ul class="menu">
             <?php $getfaculty_query = mysqli_query($condb,"select * from faculty  Order by fac_name ASC ")or die(mysqli_error($condb)); 
 if(mysqli_num_rows($getfaculty_query) > 0)
     { $number = 1; while($row_s = mysqli_fetch_array($getfaculty_query)){ $facno = $row_s['fac_id'];   ?>
-                    <li><a href="javascript:void(0);" onclick="window.open('post.php?view=Dept&facid=<?php echo $facno;?>','_self')"><?php echo $number.". ". $row_s['fac_name']; ?></a></li>
+                    <li><a href="javascript:void(0);" onclick="window.open('prog.php?view=Dept&facid=<?php echo $facno;?>','_self')"><?php echo $number.". ". $row_s['fac_name']; ?></a></li>
                     <?php $number ++;}}else{ ?>
                              <li>
                                 <a>  No Available Programme </a>
@@ -52,7 +52,7 @@ if(mysqli_num_rows($getfaculty_query) > 0)
             <span class="copyright"> &copy; 2018 Campus Management System, All Rights Reserved </span>
         <div class="divider"></div>
                     <!--<a href="http://www.demadiur.com"> --!><a href="https://smartdelta.com.ng/">
-                         Powered by Delta State Smart City.<!-- Â©  --!>
+                         Powered by Delta State Smart City.<!-- ©  --!>
                     </a>
 </div>
                             </div>
