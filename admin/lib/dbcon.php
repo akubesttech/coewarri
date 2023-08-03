@@ -60,9 +60,10 @@ function authorize($module) {
 }
 
 
-define('SITE_URL', "https://".$_SERVER['HTTP_HOST']."/");
+define('SITE_URL', "https://".$_SERVER['HTTP_HOST'].ROOTNO);
 function host(){
-	$h = "https://".$_SERVER['HTTP_HOST']."/";
+    $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";  
+$h = $protocol.$_SERVER['HTTP_HOST'].ROOTNO;
 	return $h;
 }
 
@@ -71,13 +72,13 @@ function hRoot(){
 	return $url;
 }
 global $from ,$replyto,$SCategory,$comn,$SGdept1,$SGdept2,$CA2,$infomail;
-$from = "support@deltasmartcity.ng";
+$from = "support@deltasmartcitym.ng";
 $replyto = "ifennalue2018@gmail.com";
 $SCategory = "School";
 $SGdept1 = "SUBJECT_COMB"; $SGdept2 = "SUBJECT_COMB";
 $comn="Delta state Smart Education - COEWARRI";
 $CA2="Pratical";
-$infomail = "inquiry@deltasmartcity.ng" ;
+$infomail = "inquiry@deltasmartcitym.ng" ;
 
 //parse string
 function gstr(){
@@ -640,17 +641,24 @@ function getlstr($string,$length)
 { return substr($string, strlen($string) - $length, $length);
 }
 // function to generate mat no
-function getmatno($sec,$dep,$prog){ 
-    $matno = ""; $yearadd = substr($sec,0,4);
-    $leve = substr(getprog($prog),0,3);
-    $tran=mysqli_query(Database::$conn,"select max(reg_count) from student_tb WHERE Asession = '".safee($condb,$sec)."' and Department ='".safee($condb,$dep)."' ");
+function getmatno($sec,$dep,$prog,$fac=0){ 
+    $matno = ""; $yearadd = substr($sec,0,4); $yst = substr($sec,2,2); $yend = substr($sec,7,2);
+    //$yearadds = $yst."".$yend; //ughara type mat
+ $mcode = getmcode($prog); $lcount = getlcount($prog);
+if(empty($mcode)){$yearadds = $yst."/".$yend; }else{$yearadds = $yst."".$yend;}
+    $trana = "select max(reg_count) from student_tb WHERE app_type = '".safee(Database::$conn,$prog)."' AND Faculty = '".safee(Database::$conn,$fac)."'";
+if(empty($fac)){ $trana .= " AND Asession = '".safee(Database::$conn,$sec)."' AND Department ='".safee(Database::$conn,$dep)."'";}
+$tran = mysqli_query(Database::$conn,$trana);
 while($tid = mysqli_fetch_array($tran, MYSQLI_BOTH))
-{if($tid[0] == null){$tmax="1001";}else{$tmax=$tid[0]+1;}}
-$maxadd = substr($tmax,1,4); 
-$fd = mysqli_fetch_array(mysqli_query(Database::$conn," SELECT * FROM dept where dept_id='".safee($condb,$dep)."'"));
-if(empty($fd['d_code'])){ $dID =$fd['dept_id'] ; }else{ $dID =$fd['d_code'] ; }
-$matno =($yearadd)."/".$dID."/".$maxadd;
-//$matno = $dID."/".($leve)."/".$yearadd."/".$maxadd;
+{if(empty($tid[0]) OR ($tid[0]) == "NULL"){$tmax = (int)$lcount;}else{$tmax = (int)$tid[0]+1;}} $slen = strlen($lcount);
+$maxadd = substr($tmax,0,$slen);
+$fd = mysqli_fetch_array(mysqli_query(Database::$conn," SELECT * FROM faculty where fac_id='".safee(Database::$conn,$fac)."'"));
+if(empty($fd['fcode'])){ $dID =$fd['fac_id'] ; }else{ $dID =$fd['fcode'] ; }
+//$fd = mysqli_fetch_array(mysqli_query(Database::$conn," SELECT * FROM dept where dept_id='".safee(Database::$conn,$dep)."'"));
+//if(empty($fd['d_code'])){ $dID =$fd['dept_id'] ; }else{ $dID =$fd['d_code'] ; } //gen mat by department
+if(empty($mcode)){ $mo = $dID."/".$yearadds."/".$maxadd; }else{ $mo = "COEW/".$mcode."/".($dID)."/".$yearadds."/".$maxadd; //ughara mat type 
+}
+$matno = $mo;
 //dep/level/year/no
 //dspt/otm/1718/no
 return $matno;
@@ -712,15 +720,15 @@ $mail = new PHPMailer(true);
         $mail->SMTPDebug = 0;                     // enables SMTP debug information (for testing)
         $mail->SMTPAuth = true;                  // enable SMTP authentication
         $mail->SMTPSecure = "ssl";                 // sets the prefix to the servier
-        $mail->Host = "mail.deltasmartcity.ng";      // sets GMAIL as the SMTP server
+        $mail->Host = "mail.deltasmartcitym.ng";      // sets GMAIL as the SMTP server
         $mail->Port = 465;                   // set the SMTP port for the GMAIL server
-        $mail->Username = 'notification@deltasmartcity.ng';
+        $mail->Username = 'notification@deltasmartcitym.ng';
          $mail->Password = 'xculp82017';
 
        // $mail->SetFrom('youremail@gmail.com', 'Your Name');
-       $mail->SetFrom('notification@deltasmartcity.ng', $sendername);
-       $mail->AddReplyTo("notification@deltasmartcity.ng",$sendername);
-       $mail->addBCC("mailcopy@deltasmartcity.ng");
+       $mail->SetFrom('notification@deltasmartcitym.ng', $sendername);
+       $mail->AddReplyTo("notification@deltasmartcitym.ng",$sendername);
+       $mail->addBCC("mailcopy@deltasmartcitym.ng");
         $mail->AddAddress($email);
        $mail->Subject = $sub ;//trim("Email Verifcation - www.thesoftwareguy.in");
         $mail->MsgHTML($message);
@@ -748,15 +756,15 @@ $mail = new PHPMailer(true);
         $mail->SMTPDebug = 0;                     // enables SMTP debug information (for testing)
         $mail->SMTPAuth = true;                  // enable SMTP authentication
         $mail->SMTPSecure = "ssl";                 // sets the prefix to the servier
-        $mail->Host = "mail.deltasmartcity.ng";      // sets GMAIL as the SMTP server
+        $mail->Host = "mail.deltasmartcitym.ng";      // sets GMAIL as the SMTP server
         $mail->Port = 465;                   // set the SMTP port for the GMAIL server
-        $mail->Username = 'notification@deltasmartcity.ng';
+        $mail->Username = 'notification@deltasmartcitym.ng';
          $mail->Password = 'xculp82017';
 
        // $mail->SetFrom('youremail@gmail.com', 'Your Name');
-       $mail->SetFrom('notification@deltasmartcity.ng', $sendername);
-       $mail->AddReplyTo("notification@deltasmartcity.ng",$sendername);
-        $mail->addBCC("mailcopy@deltasmartcity.ng");
+       $mail->SetFrom('notification@deltasmartcitym.ng', $sendername);
+       $mail->AddReplyTo("notification@deltasmartcitym.ng",$sendername);
+        $mail->addBCC("mailcopy@deltasmartcitym.ng");
         $mail->AddAddress($email);
        $mail->Subject = $sub ;//trim("Email Verifcation - www.thesoftwareguy.in");
         $mail->MsgHTML($message);
@@ -983,19 +991,26 @@ $diff = $end_ts - $start_ts;
 return round($diff / 86400);
 }
 //payment split paystack
-function getsplit($amountn,$fran="",$fra1="",$fras="",$samt="",$scom=0,$var = 0){
-$tcharge = getptcharge($amountn,$fran); $amountp = $amountn + $tcharge; 
-$actualcharge = getper($amountp,$fra1,$amountn);
-$diffcharge = $actualcharge - $tcharge ;
+function getsplit($amountn,$fran="",$fra1="",$fras="",$samt="",$scom=0,$var = 0,$frate = 0){
+  if($frate > 0){ $tcharge = $frate; }else{$tcharge = getptcharge($amountn,$fran); }  
+$amountp = $amountn + $tcharge; 
+if($frate > 0){ 
+   $actualcharge = 0;
+$diffcharge = 0 ; 
+}else{ $actualcharge = getper($amountp,$fra1,$amountn);
+$diffcharge = $actualcharge - $tcharge ; }
 if($scom > 0){
  $shareamount = $samt - $scom;   }else{ $shareamount = $samt;}
-$schshare = $amountp - $shareamount - $tcharge  ;
+$schshare = ($amountp - $shareamount) - $tcharge  ;
 $finalshare = $amountp -  $schshare;
 $endshare =  $finalshare - $tcharge ;
-$bamt = getper($endshare,$fras) + $tcharge ;
-$benamt = $finalshare -  $bamt ;
+if($frate > 0){ $bamt = getper($endshare,$fras); 
+$benamt = ($endshare - $bamt) + $tcharge ;
+}else{$bamt = getper($endshare,$fras) + $tcharge ;
+$benamt = round($finalshare - $bamt,2) ;  
+}
 $amt = $shareamount - $diffcharge;
- $smartamount =  $actualcharge + $amt ;
+if($samt > 0){ $smartamount =  $actualcharge + $amt ;}else{ $smartamount =  $actualcharge ;}
 if ($var==1){ return $schshare; }else if($var==2){return $benamt;}else if($var==3){return $amountp;}else{ return $smartamount;}
 }
 //get default commission 1 and 2
@@ -1031,8 +1046,8 @@ function getinstalment($tp=0,$noi=0,$spay=0){ $inpay = 0;
 return  $inpay;
 }
 // get due amount
-function getDueamt($fcat,$prog,$lev,$scan,$fid=0){ $conn = 0; //$sh = 0;
-$qcompamt = "select * from fee_db where  level= '".safee(Database::$conn,$lev)."' AND program='".safee(Database::$conn,$prog)."' AND ft_cat ='".safee(Database::$conn,$fcat)."' AND Cat_fee = '".safee(Database::$conn,$scan)."' ";            
+function getDueamt($fcat,$prog,$lev,$scan,$fid=0,$sec=0){ $conn = 0; //$sh = 0;
+$qcompamt = "select * from fee_db where  level= '".safee(Database::$conn,$lev)."' AND session = '".safee(Database::$conn,$sec)."' AND program='".safee(Database::$conn,$prog)."' AND ft_cat ='".safee(Database::$conn,$fcat)."' AND Cat_fee = '".safee(Database::$conn,$scan)."' ";            
 if($fcat == "4"){ }else{if(!empty($fid)){ $qcompamt .= " and feetype = '".safee(Database::$conn,$fid)."'";}}
 $qcompamtd = mysqli_query(Database::$conn,$qcompamt) or die(mysqli_error(Database::$conn));
 $sumcreditm=0;
@@ -1136,6 +1151,76 @@ foreach($arr as $val => $nvalue)
 $resultsec2 = mysqli_query(Database::$conn,"SELECT * FROM level_db WHERE prog = '".safee(Database::$conn,$pval)."'  ORDER BY level_order ASC");
 while($rssec2 = mysqli_fetch_array($resultsec2))
 {echo "<option value='$rssec2[level_order]'>$rssec2[level_name]</option>";}}
+
+function hide_num($phone) {//return substr($phone, 0, -4) . "**"; return substr($phone, 1, 2) . "**";
+    return substr_replace($phone, str_repeat("*", 9), 8, 16);}  
+    //get bank name by id and bcode
+function getbankname($bid = "",$bkey=""){$conn="";  
+$qbank = "select * from bank WHERE b_id > 0";
+ if(!empty($bkey)){ $qbank .= " and b_sort = '".safee(Database::$conn,$bkey)."'";}
+ if(!empty($bid)){ $qbank .= " and b_id ='".safee(Database::$conn,$bid)."'";}
+ $qbank2 = mysqli_query(Database::$conn,$qbank)or die(mysqli_error($conn));
+$resbank = mysqli_fetch_array($qbank2);
+ $nameclass2=$resbank['b_name']." (".$resbank['acc_num'].")";
+return $nameclass2;
+}   
+/*function getsplintamt($lev,$prog,$fcat,$stcat,$sec,$matno,$bkey){$conn="";  
+$qcompamt = "select * from fee_db where  level= '".safee(Database::$conn,$lev)."' AND program='".safee(Database::$conn,$prog)."' AND ft_cat ='".safee(Database::$conn,$fcat)."'
+ AND Cat_fee = '".safee(Database::$conn,$stcat)."',AND bcode = '".safee(Database::$conn,$bkey)."' ";            
+$qcompamtd = mysqli_query(Database::$conn,$qcompamt) or die(mysqli_error(Database::$conn));
+$resbank = mysqli_fetch_array($qcompamtd);  $feeid = $resbank['feetype']; $amt = $resbank['f_amount'];
+$qpayn = mysqli_query(Database::$conn,"SELECT * FROM feecomp_tb WHERE  regno ='".safee(Database::$conn,$matno)."' AND session = '".safee(Database::$conn,$sec)."' and pstatus = 1 AND f_amount = '".safee(Database::$conn,$amt)."' AND feetype = '".safee(Database::$conn,$feeid)."' ");
+    $countn = mysqli_num_rows($qpayn); if($countn > 0){ $paysplint = "0.00";}else{ $paysplint = $amt; }
+return $paysplint;
+} */
+
+function getsplintamt($lev,$prog,$fcat,$stcat,$sec,$matno,$bkey){$conn="";
+$qcompamt = "SELECT DISTINCT fd.f_amount FROM fee_db fd LEFT JOIN feecomp_tb fc ON fc.feetype = fd.feetype WHERE fd.level= '".safee(Database::$conn,$lev)."' AND fd.program='".safee(Database::$conn,$prog)."' AND fd.ft_cat ='".safee(Database::$conn,$fcat)."'  
+ AND fd.Cat_fee = '".safee(Database::$conn,$stcat)."' AND fd.bcode = '".safee(Database::$conn,$bkey)."' AND fc.regno ='".safee(Database::$conn,$matno)."' AND fd.session = '".safee(Database::$conn,$sec)."' and fc.pstatus = '0' ";   
+$qcompamtd = mysqli_query(Database::$conn,$qcompamt) or die(mysqli_error(Database::$conn));
+$sumamt = 0; 
+while($resbank = mysqli_fetch_array($qcompamtd)){ 
+    $amt = $resbank['f_amount'];
+    $sumamt = + $amt ;
+    }
+ if($sumamt > 0){ return $sumamt;}else{ return 0.00; }
+}
+  
+  //payment split paystack
+function getsplit_old($amountn,$fran="",$fra1="",$fras="",$samt="",$scom=0,$var = 0){
+$tcharge = getptcharge($amountn,$fran); $amountp = $amountn + $tcharge; 
+$actualcharge = getper($amountp,$fra1,$amountn);
+$diffcharge = $actualcharge - $tcharge ;
+if($scom > 0){
+ $shareamount = $samt - $scom;   }else{ $shareamount = $samt;}
+$schshare = $amountp - $shareamount - $tcharge  ;
+$finalshare = $amountp -  $schshare;
+$endshare =  $finalshare - $tcharge ;
+$bamt = getper($endshare,$fras) + $tcharge ;
+$benamt = $finalshare -  $bamt ;
+$amt = $shareamount - $diffcharge;
+ $smartamount =  $actualcharge + $amt ;
+if ($var==1){ return $schshare; }else if($var==2){return $benamt;}else if($var==3){return $amountp;}else{ return $smartamount;}
+}
+ function getcid($get_RegNo,$dept,$lev,$val= "")
+{ $conn = 0;
+$query2_fac = mysqli_query(Database::$conn,"select C_id,semester from courses where C_code = '".trim($get_RegNo)."' AND dept_c = '$dept' AND C_level = '$lev'")or die(mysqli_error($condb));
+$count_fac = mysqli_fetch_array($query2_fac);
+if(empty($count_fac['C_id'])){ $cos = 0; }else{$cos = $count_fac['C_id']; }
+if(empty($val)){ $nameclass2=$cos;}else{$nameclass2=$count_fac['semester'];}
+return $nameclass2;
+}  
+//get student mat no by id
+   function getmatid($matid)
+{$query2 = mysqli_query(Database::$conn,"select * from student_tb where stud_id = '$matid' ")or die(mysqli_error($condb));
+$count = mysqli_fetch_array($query2);$nameclass2=trim($count['RegNo']);return $nameclass2;}
+// get session by id
+//get student mat no by id
+   function getsecbyid($matid)
+{$query2 = mysqli_query(Database::$conn,"select * from session_tb where session_id = '$matid' ")or die(mysqli_error($condb));
+$count = mysqli_fetch_array($query2);$nameclass2=trim($count['session_name']);return $nameclass2;}                    
+
+    
 // // time zone manager
 /*if(!isset($_SESSION['timezone']))
 {if(!isset($_REQUEST['offset']))

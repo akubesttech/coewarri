@@ -34,15 +34,15 @@ $sql_gradesetl = mysqli_query($condb,"select * from grade_tb where prog ='".safe
 </div>
 <div class="block-content2 collapse in"  >
                                 <div class="span121" style="background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('<?php if ($existl > 0 ){ echo "../admin/".$row['Logo'];
-	}else{ echo "../Student/css/images/logo.png";} ?>'); background-repeat: no-repeat;background-position: center;  background-size: 550px 500px;display: inline; -webkit-print-color-adjust: exact; ">
+	}else{ echo "../Student/css/images/logo.png";} ?>'); background-repeat: no-repeat;background-position: center;  background-size: 550px 500px;display: block;!important;  -webkit-print-color-adjust: exact; ">
 								
 								 <!--------------------form------------------->
 								<form method="post" enctype="multipart/form-data">
 					<div class="control-group">
                              <div class="controls">
                              
-                                <table  align="center" style="margin:5px; font-size:15px;  font-weight:bold; width:900px;"  border="0">
-    <style type="text/css" media="print"> @media print { a[href]:after {content: none !important;} }
+                                <table  align="center" style="margin:5px; font-size:15px;  font-weight:bold; width:900px;" class="tble"  border="0">
+    <style type="text/css" media="print"> @media print {  a[href]:after {visibility: hidden !important;} }
 .row1 {background-color: #EFEFEF;border: 1px solid #98C1D1;
 		height: 30px;	font-family:Verdana, Geneva, sans-serif; font-size:12px; }
 .row2 {background-color: #DEDEDE;border: 1px solid #98C1D1;height: 30px; font-family:Verdana, Geneva, sans-serif; 
@@ -90,7 +90,7 @@ Programm: <?php echo getprog($row2['app_type']); ?></td>
           </tr>
 <div class="rounded">
        
-       <table border="1" style="margin:5px; font-size:15px;  font-weight:bold; width:900px;" >
+       <table border="1" style="margin:5px; font-size:15px;  font-weight:bold; width:900px;background-color: transparent;" class="tble" >
        
         <thead>
       <!--  <tr style="background-color:lightblue;box-shadow: 2px 2px gray;">
@@ -196,7 +196,7 @@ if ($i%2) {$class = 'row1';} else {$class = 'row2';}
     </tfoot  >
                 </tbody></table>
   
- <table border='1' style='margin:4px; font-size:13px;  font-weight:bold; width:900px;'><tr class='row2' style="background-color:#CFF;text-align:centre;"><td colspan='10'><h4>Transcript Grade System:</h4></td></tr>
+ <table border='1' style='margin:4px; font-size:13px;  font-weight:bold; width:900px;background-color: transparent;' class="tble"><tr class='row2' style="background-color:#CFF;text-align:centre;"><td colspan='10'><h4>Transcript Grade System:</h4></td></tr>
 							 
                               <tr style='text-align:left;' >
 							<td colspan='10'><h5>

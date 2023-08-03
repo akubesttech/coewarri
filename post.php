@@ -25,13 +25,7 @@ else
 		            case 'News' :
 		            $content    = 'new_more.php';		
 		            break;
-		            case 'Program' :
-		            $content    = 'Our_pro.php';		
-		            break;
 		            
-		        case 'Dept' :
-		            $content    = 'school_dept.php';		
-		            break;
 		            
 	                default :
 		           $content    = 'n_main.php';

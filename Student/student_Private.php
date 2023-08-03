@@ -1,9 +1,9 @@
+
 <?php  include('header.php'); ?>
 <?php include('session.php'); ?>
 	
 		         
         <?php 
-
 if(isset($_GET['addrooms'])){
 ?>
 
@@ -25,7 +25,7 @@ if(isset($_GET['addrooms'])){
 <?php include('student_slidebar.php'); ?>
 
     <?php include('navbar.php') ?>
-  <?php $get_RegNo= $_GET['id']; ?>
+  <?php $get_RegNo = isset($_GET['id']) ? $_GET['id'] : ''; ?>
     <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
@@ -73,9 +73,10 @@ if(isset($_GET['addrooms'])){
 		              case 'Evt' :
 		            $content    = 'Events.php';		
 		            break;
-		            case 'Nclearance' :
+                    case 'Nclearance' :
 		            $content    = 'upload_c_files..php';		
 		            break;
+		            
 	                default :
 		            $content    = 'userprofile.php';
 				

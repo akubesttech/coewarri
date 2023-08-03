@@ -37,7 +37,8 @@ $facadd = $_POST['fac1'];
      $resultcheck = mysqli_query($condb,"select * from courses where fac_id ='".safee($condb,$facadd)."' and dept_c = '".safee($condb,$dept_c)."' ")or die(mysqli_error($condb));	if(mysqli_num_rows($resultcheck)>0){ message("Courses already uploaded for ".getdeptc($dept_c), "error");redirect('add_Courses.php?view=impc');}else{
      while(($impData = fgetcsv($file, 1000, ',')) !== FALSE){ 
  if($flag) { $flag = false; continue; }
- $query = mysqli_query($condb,"INSERT INTO courses (dept_c,C_title,C_code,C_unit,semester,C_level,fac_id,c_cat) VALUES ('".safee($condb,$dept_c)."','".$impData[2]."', '".trim($impData[1])."', '".$impData[3]."','".$impData[4]."','".$impData[5]."','".safee($condb,$facadd)."','".$impData[6]."')")or die(mysqli_error($condb)); //$query = mysqli_query($condb,$sql);
+ $codem = str_replace(" ","",$impData[1]);
+ $query = mysqli_query($condb,"INSERT INTO courses (dept_c,C_title,C_code,C_unit,semester,C_level,fac_id,c_cat) VALUES ('".safee($condb,$dept_c)."','".$impData[2]."', '".trim($codem)."', '".$impData[3]."','".$impData[4]."','".$impData[5]."','".safee($condb,$facadd)."','".$impData[6]."')")or die(mysqli_error($condb)); //$query = mysqli_query($condb,$sql);
      if($query){ message("Data imported successfully.", "success");
 		        redirect('add_Courses.php?view=vupload');
     						}else{ message("Cannot import data. Something went wrong.", "error");

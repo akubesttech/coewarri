@@ -92,5 +92,5 @@ if(mysqli_num_rows($getfaculty_query) > 0)
 	
     <?php include('script.php'); ?>
     <!-- CDF: No JS dependencies were declared //-->
-
+<script src="//code.tidio.co/lfy2g0yxzayvwngkjqsmckhdkdmlj8s6.js" async></script>
 </body></html>

@@ -72,6 +72,7 @@ write down your payment reference,you will need it to continue your application.
             <input type='hidden' name='emailx' value='<?php echo $femail;?>' /> 
 			<input type='hidden' name='total' value='<?php echo $tpayamt ;?>' />
              <input type='hidden' name='ft_cat' value='<?php echo $f_cat;?>' />
+             <input type='hidden' name='progM' value='<?php echo $ftype;?>' />
 			
 			<div class="form_box">
 			 <div class="clear" style="overflow: auto;">

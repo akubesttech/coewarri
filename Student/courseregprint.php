@@ -13,6 +13,11 @@ include('session.php');
 //$student_reg = $rsprint['stud_reg'];
  $qsql = mysqli_query($condb,"SELECT * FROM student_tb  WHERE  stud_id ='".safee($condb,$session_id)."' ")or die(mysqli_error($condb));
 $rsprint = mysqli_fetch_array($qsql); $regen = $rsprint['RegNo']; $sshow = $rsprint['istatus'];  $semailo = $rsprint['e_address'];
+ $level=$_SESSION['levc'];
+ $semester= $_SESSION['semc'];
+ $session= $_SESSION['secc'];
+   $sumcredit2 = 0;
+   $sumcredit = 0;
 ?>
 
 <body style=" padding: 5px; height: 800px;"  >
@@ -55,7 +60,7 @@ $rsprint = mysqli_fetch_array($qsql); $regen = $rsprint['RegNo']; $sshow = $rspr
      <p align="center"></p>
      <p align="left"> .</p>
       <p><?php echo $SGdept1; ?>:&nbsp;<?php echo getdeptc($rsprint['Department']);?></p> 
-      <p>Level: <?php echo getlevel($student_level,$student_prog); ?></p> --!>
+      <p>Level: <?php echo getlevel($level,$student_prog); ?></p> --!>
       <!-- ################################################################################################ --> 
       <!-- / main body 
       <div class="clear"><hr></div>
@@ -69,7 +74,7 @@ $rsprint = mysqli_fetch_array($qsql); $regen = $rsprint['RegNo']; $sshow = $rspr
 <p><?php if(!empty($smato)){ if(empty($sshow)){ ?>Username: <?php echo $semailo; }else{ ?> Matric Number: <?php echo  $regen; } }else{ ?> Matric Number: <?php echo  $regen; } ?></p>
 <p><?php echo $SCategory; ?> :   <?php echo getfacultyc($rsprint['Faculty']) ; ?></p>
 <p><?php echo $SGdept1; ?>:&nbsp;<?php echo getdeptc($rsprint['Department']);?></p>
-Level: <?php echo getlevel($student_level,$student_prog); ?></td>
+Level: <?php echo getlevel($level,$student_prog); ?></td>
 
             <td height="32" colspan="1" style="text-align: center;width: 190px;" >    
             <img  src="<?php 
@@ -92,10 +97,10 @@ Level: <?php echo getlevel($student_level,$student_prog); ?></td>
 <div class="rounded">
        
        <table border="1" style="margin:5px; font-size:15px;  font-weight:bold; width:900px;" >
-       
+        <?php if($semester == "Second"){ $nsem = $semester; }else{ $nsem = "First"; } ?>
         <thead>
         <tr style="background-color:lightblue;box-shadow: 2px 2px gray;">
-          <td height="36" colspan="9" style="color: #000080; font-size:20px;  font-family:  vandana;text-shadow: 1px 1px gray;"><strong> <strong> Courses Registered for First Semester <?php echo $default_session; ?> Academic Session .</strong></td>
+          <td height="36" colspan="9" style="color: #000080; font-size:20px;  font-family:  vandana;text-shadow: 1px 1px gray;"><strong> <strong> Courses Registered for <?php echo $nsem; ?> Semester <?php echo $session; ?> Academic Session .</strong></td>
         </tr> <tr><td height="36" colspan="9"></td> </tr>
                         <tr style="background-color: gray; color: white;font-family:Verdana, Geneva, sans-serif;font-size:12px;" >
                         <!-- <th><input type="checkbox" name="chkall" id="chkall" onclick="return checkall('selector[]');"></th>--!>
@@ -112,10 +117,19 @@ Level: <?php echo getlevel($student_level,$student_prog); ?></td>
                       </thead>
                        <tbody>
                       <?php
-                      $getfirst_query = mysqli_query($condb,"select ctb.c_code,ctb.semester,ctb.c_unit,ctb.lect_approve,ctb.creg_id,ctb.course_id,cn.c_cat,cn.C_title from coursereg_tb ctb LEFT JOIN courses cn ON ctb.course_id = cn.C_id where sregno='".safee($condb,$student_RegNo)."' and session ='".safee($condb,$default_session)."' and ctb.semester='First'and creg_status='1' ORDER BY C_code,C_title  DESC ")or die(mysqli_error($condb));
+                      if($semester == "both"){ 
+                      //$getfirst_query = mysqli_query($condb,"select ctb.c_code,ctb.semester,ctb.c_unit,ctb.lect_approve,ctb.creg_id,ctb.course_id,cn.c_cat,cn.C_title from coursereg_tb ctb LEFT JOIN courses cn ON ctb.course_id = cn.C_id where sregno='".safee($condb,$student_RegNo)."' and session ='".safee($condb,$session)."' and ctb.level = '".safee($condb,$level)."' and ctb.semester='First'and creg_status='1' ORDER BY C_code,C_title  DESC ")or die(mysqli_error($condb));
                       //collega of education
-                     /* $getfirst_query  = mysqli_query($condb,"select SUBSTRING(cn.C_code, 1,3) AS ccode,ctb.c_code,ctb.semester,ctb.c_unit,ctb.lect_approve,ctb.creg_id,ctb.course_id,cn.c_cat,cn.C_title from coursereg_tb ctb LEFT JOIN courses cn ON ctb.course_id = cn.C_id where sregno='".safee($condb,$student_RegNo)."' and session ='".safee($condb,$default_session)."' and ctb.semester='First'and creg_status='1' ORDER BY FIELD(ccode, 'GSE', 'EDU') DESC, C_code, C_title ")or die(mysqli_error($condb)); */
-                      						 if(mysqli_num_rows($getfirst_query)<1){
+$getfirst_query  = mysqli_query($condb,"select SUBSTRING(cn.C_code, 1,3) AS ccode,ctb.c_code,ctb.semester,ctb.c_unit,ctb.lect_approve,ctb.creg_id,ctb.course_id,cn.c_cat,cn.C_title from coursereg_tb ctb LEFT JOIN courses cn ON ctb.course_id = cn.C_id where sregno='".safee($condb,$student_RegNo)."' and session ='".safee($condb,$session)."' and ctb.level = '".safee($condb,$level)."' and ctb.semester='First'and creg_status='1' ORDER BY FIELD(ccode, 'GSE', 'EDU') DESC, C_code, C_title ")or die(mysqli_error($condb)); 
+//$viewutme_query2  = mysqli_query($condb,"select ctb.c_code,ctb.semester,ctb.c_unit,ctb.lect_approve,ctb.creg_id,ctb.course_id,cn.c_cat,cn.C_title from coursereg_tb ctb LEFT JOIN courses cn ON ctb.course_id = cn.C_id where sregno='".safee($condb,$student_RegNo)."' and session ='".safee($condb,$session)."' and ctb.level = '".safee($condb,$level)."' and ctb.semester='Second'and creg_status='1' ORDER BY C_code,C_title  DESC ")or die(mysqli_error($condb));
+//college of education
+ $viewutme_query2 = mysqli_query($condb,"select SUBSTRING(cn.C_code, 1,3) AS ccode,ctb.c_code,ctb.semester,ctb.c_unit,ctb.lect_approve,ctb.creg_id,ctb.course_id,cn.c_cat,cn.C_title from coursereg_tb ctb LEFT JOIN courses cn ON ctb.course_id = cn.C_id where sregno='".safee($condb,$student_RegNo)."' and session ='".safee($condb,$session)."' and ctb.level = '".safee($condb,$level)."' and ctb.semester='Second'and creg_status='1' ORDER BY FIELD(ccode, 'GSE', 'EDU') DESC, C_code, C_title ")or die(mysqli_error($condb)); 
+                       }else{						 
+ //$getfirst_query = mysqli_query($condb,"select ctb.c_code,ctb.semester,ctb.c_unit,ctb.lect_approve,ctb.creg_id,ctb.course_id,cn.c_cat,cn.C_title from coursereg_tb ctb LEFT JOIN courses cn ON ctb.course_id = cn.C_id where sregno='".safee($condb,$student_RegNo)."' and session ='".safee($condb,$session)."' and ctb.level = '".safee($condb,$level)."' and ctb.semester='".safee($condb,$semester)."' and creg_status='1' ORDER BY C_code,C_title  DESC ")or die(mysqli_error($condb));
+                      //collega of education
+ $getfirst_query  = mysqli_query($condb,"select SUBSTRING(cn.C_code, 1,3) AS ccode,ctb.c_code,ctb.semester,ctb.c_unit,ctb.lect_approve,ctb.creg_id,ctb.course_id,cn.c_cat,cn.C_title from coursereg_tb ctb LEFT JOIN courses cn ON ctb.course_id = cn.C_id where sregno='".safee($condb,$student_RegNo)."' and session ='".safee($condb,$session)."' and ctb.level = '".safee($condb,$level)."' and ctb.semester='".safee($condb,$semester)."'and creg_status='1' ORDER BY FIELD(ccode, 'GSE', 'EDU') DESC, C_code, C_title ")or die(mysqli_error($condb));
+                                               }                         
+                                               if(mysqli_num_rows($getfirst_query)<1){
 	  echo "<tr class='row2' style=\"background-color:#CFF;text-align:centre;\">
           <td colspan='9' height=\"30\"><strong>No Course has been Registered in this First Semester.</strong></td></tr>";
  }
@@ -157,16 +171,13 @@ $viewreg_query = mysqli_query($condb,"select DISTINCT lect_approve  from courser
 <td style="text-align:justify;"><?php echo $status; ?></td>
 
                         </tr>
-                    <?php } ?>
-                    
-								<?php 
-$sumnet="select SUM(c_unit) from coursereg_tb where sregno='".safee($condb,$regen)."' and session ='".safee($condb,$default_session)."' and semester='First'";
-  $resultsumnet = mysqli_query($condb,$sumnet); 
-  $num_rows2 =mysqli_num_rows($resultsumnet);
- 
- while($get_infc = mysqli_fetch_row($resultsumnet))
- {
-	  foreach ($get_infc as $sumcredit)
+                    <?php $sumcredit += $row_utme['c_unit']; } ?>
+	<?php 
+//$sumnet="select SUM(c_unit) from coursereg_tb where sregno='".safee($condb,$regen)."' and session ='".safee($condb,$default_session)."' and semester='First'";
+  //$resultsumnet = mysqli_query($condb,$sumnet); 
+  //$num_rows2 =mysqli_num_rows($resultsumnet);
+  //while($get_infc = mysqli_fetch_row($resultsumnet))
+ //{foreach ($get_infc as $sumcredit)
 								?>				
 											
 								<tfoot>
@@ -174,7 +185,7 @@ $sumnet="select SUM(c_unit) from coursereg_tb where sregno='".safee($condb,$rege
       <td colspan="3"><strong>Total Credit Unit:</strong></td>
   <!--  <td align='center'></td><td align='center'></td> --!><td align='center'><strong> <?php if($sumcredit > 0){ echo $sumcredit;}else{echo "0";} ?></strong></td>
     </tr>
-   </tfoot> 	<?php } ?>
+   </tfoot> 	<?php //} ?>
                      </tbody>
       
        
@@ -182,7 +193,7 @@ $sumnet="select SUM(c_unit) from coursereg_tb where sregno='".safee($condb,$rege
     
     
     <table border="1" style="margin:5px; font-size:15px;  font-weight:bold; width:900px;" >
-       
+       	<?php if($semester == "First" || $semester == "Second"){ }else{ ?>
         <thead>
         <tr style="background-color:lightblue;box-shadow: 2px 2px gray;">
           <td height="36" colspan="9" style="color: #000080; font-size:20px;  font-family:  vandana;text-shadow: 1px 1px gray;"><strong> Courses Registered for Second Semester <?php echo $default_session; ?> Academic Session .</strong></td>
@@ -202,9 +213,7 @@ $sumnet="select SUM(c_unit) from coursereg_tb where sregno='".safee($condb,$rege
                       </thead>
                        <tbody>
                       <?php
-                    $viewutme_query2  = mysqli_query($condb,"select ctb.c_code,ctb.semester,ctb.c_unit,ctb.lect_approve,ctb.creg_id,ctb.course_id,cn.c_cat,cn.C_title from coursereg_tb ctb LEFT JOIN courses cn ON ctb.course_id = cn.C_id where sregno='".safee($condb,$student_RegNo)."' and session ='".safee($condb,$default_session)."' and ctb.semester='Second'and creg_status='1' ORDER BY C_code,C_title  DESC ")or die(mysqli_error($condb));
-//college of education
-/* $viewutme_query2 = mysqli_query($condb,"select SUBSTRING(cn.C_code, 1,3) AS ccode,ctb.c_code,ctb.semester,ctb.c_unit,ctb.lect_approve,ctb.creg_id,ctb.course_id,cn.c_cat,cn.C_title from coursereg_tb ctb LEFT JOIN courses cn ON ctb.course_id = cn.C_id where sregno='".safee($condb,$student_RegNo)."' and session ='".safee($condb,$default_session)."' and ctb.semester='Second'and creg_status='1' ORDER BY FIELD(ccode, 'GSE', 'EDU') DESC, C_code, C_title ")or die(mysqli_error($condb)); */
+
                       						 if(mysqli_num_rows($viewutme_query2)<1){
 	  echo "<tr class='row2' style=\"background-color:#CFF;text-align:centre;\">
           <td colspan='9' height=\"30\"><strong>No Course has been Registered in this Second Semester.</strong></td></tr>";
@@ -243,22 +252,15 @@ $viewreg_query = mysqli_query($condb,"select DISTINCT lect_approve  from courser
                          <td width="120">
 <?php //echo $row_utme['session']; ?>	</td> --!>
 <td style="text-align:justify;"><?php echo $status; ?></td>
-									 		
-											
-												
-												
-										
-                        </tr>
-                    <?php } ?>
-                     
-	<?php 
-$sumnet2="select SUM(c_unit) from coursereg_tb where sregno='".safee($condb,$regen)."' and session ='".safee($condb,$default_session)."' and semester='Second'";
-  $resultsumnet2 = mysqli_query($condb,$sumnet2); 
-  $num_rows2 =mysqli_num_rows($resultsumnet2);
- 
- while($get_infc = mysqli_fetch_row($resultsumnet2))
- {
-	  foreach ($get_infc as $sumcredit2)
+
+</tr>
+                    <?php $sumcredit2 += $row_utme['c_unit']; } ?>
+                     <?php 
+//$sumnet2="select SUM(c_unit) from coursereg_tb where sregno='".safee($condb,$regen)."' and session ='".safee($condb,$default_session)."' and semester='Second'";
+  //$resultsumnet2 = mysqli_query($condb,$sumnet2); 
+  //$num_rows2 =mysqli_num_rows($resultsumnet2);
+ //while($get_infc = mysqli_fetch_row($resultsumnet2))
+ //{ foreach ($get_infc as $sumcredit2)
 								?>				
 											
 								<tfoot>
@@ -266,48 +268,53 @@ $sumnet2="select SUM(c_unit) from coursereg_tb where sregno='".safee($condb,$reg
       <td colspan="3"><strong>Total Credit Unit:</strong></td>
    <!-- <td align='center'></td><td align='center'></td>--!> <td align='center'><strong><?php if($sumcredit2 > 0){ echo $sumcredit2;}else{echo "0";} ?></strong></td>
     </tr>
-   </tfoot> 	<?php } ?>
+   </tfoot> 	<?php //} ?>
                      </tbody>
       
-       
+       <?php } ?>
     </table>
      <?php
                     $grand = $sumcredit2 + $sumcredit;
  echo "<table border='1' style='margin:5px; font-size:15px;  font-weight:bold; width:900px;'><tr class='row2' style=\"background-color:#CFF;text-align:centre;\"><td colspan='9' height=\"30\"><strong>The Grand total of course units for both semesters is $grand. Credit Unit</strong></td>";
  print "</table>\n"; ?>
-   <table>
+   <table border="0" style="margin:5px; font-size:15px;  font-weight:bold; width:900px;">
  <tr >
-         <td colspan="4">&nbsp;</td>
+         <td colspan="5">&nbsp;</td>
        </tr>
        <tr >
-         <td colspan="4">&nbsp;</td>
+         <td colspan="5">&nbsp;</td>
        </tr>
        <tr >
-         <td colspan="4">&nbsp;</td>
+         <td colspan="5">&nbsp;</td>
        </tr>
-        <tr >
-         <td colspan="4">&nbsp;</td>
-       </tr>
-         <tr >
-         <td colspan="4">&nbsp;</td>
-       </tr>
-       <tr>
+       
+       <tr style="font-size:8;text-align: center;">
          <td colspan="1">_________________________________&nbsp;&nbsp;</td>
-         <td colspan="1">&nbsp;&nbsp;<!-- _________________________________--!>&nbsp;&nbsp; </td>
+         <td colspan="3">&nbsp;&nbsp;<!-- _________________________________--!>&nbsp;&nbsp; </td>
          <td colspan="1"> _________________________________ </td>
        </tr>
        
        <tr style="font-size:8;text-align: center;">
-         <td colspan="1"><strong>Student's Signature and Date</strong></td>
-         <td colspan="1"><strong><!--Course Advisor Signature and Date--!></strong> </td>
-          <td colspan="1"><strong><!--HOD Signature and Date --!>Course Advisor Signature and Date</strong> </td>
+         <td colspan="1"><strong>Head of Department Signature and Date</strong></td>
+         <td colspan="3"><strong><!--Course Advisor Signature and Date--!></strong> </td>
+          <td colspan="1"><strong><!--HOD Signature and Date --!>Dean of Faculty Signature and Date</strong> </td>
        </tr>
       
        <tr>
-         <td colspan="4">&nbsp;</td>
+         <td colspan="5">&nbsp;</td>
+       </tr>
+        <tr style="font-size:8;text-align: center;"><?php if($sprog_dura > 3){ ?>
+         <td colspan="1">_________________________________&nbsp;&nbsp;</td>
+         <td colspan="3"><!-- &nbsp;&nbsp;_________________________________--!>&nbsp;&nbsp; </td><?php } ?>
+         <td colspan="1"> _________________________________ </td>
        </tr>
        
-    <!--    <tr>
+       <tr style="font-size:8;text-align: center;" ><?php if($sprog_dura > 3){ ?>
+         <td colspan="1"><strong>Programme Director's Signature and Date</strong></td>
+         <td colspan="3"><strong><!--Course Advisor Signature and Date--!></strong> </td><?php } ?>
+          <td colspan="1"><strong><!--HOD Signature and Date --!>Student's Signature and Date</strong> </td>
+       </tr>
+      <!-- <tr>
          <td colspan="1">&nbsp;&nbsp;</td>
          <td colspan="1">&nbsp;&nbsp; _________________________________&nbsp;&nbsp; </td>
          <td colspan="1"> </td>
@@ -318,16 +325,17 @@ $sumnet2="select SUM(c_unit) from coursereg_tb where sregno='".safee($condb,$reg
          <td colspan="1"><strong>Dean of Studies Signature and Date</strong> </td>
           <td colspan="1"><strong></strong> </td>
        </tr> --!>
-       <!--
-       <tr>
+       
+       <!--  <tr style="font-size:8;text-align: center;" >
          <td colspan="4">_______________________________________&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;             _________________________________________</td>
        </tr>
+       <tr style="font-size:8;text-align: center;">
+         <td colspan="2"><strong>Programme Director's Signature and Date </strong></td>
+         <td colspan="4"><strong>Student's Signature and Date</strong></td>
+       </tr> --!>
+       
        <tr>
-         <td colspan="2"><strong>FORM TEACHER SIGNATURE </strong></td>
-         <td colspan="4"><strong>DATE</strong></td>
-       </tr>--!>
-       <tr>
-         <td colspan="4"><strong><font color="red"></font> </strong></td>
+         <td colspan="5"><strong><font color="red"></font> </strong></td>
        </tr>
      
       <?php //}?>

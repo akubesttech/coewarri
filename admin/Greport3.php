@@ -107,10 +107,10 @@ if(substr($feetype,0,1) == "B"){ $feet = getfeecat($row_utme2['ft_cat']);}else{ 
 if($is_active == "1"){$amtn = $row_utme['pay_amt']; }else{ $amtn = "0.00"; }
 if ($i%2) {$classo = 'row1';} else {$classo = 'row2';}$i += 1;
 //get Sccheduled Fee
-$qschedfee=mysqli_query($condb,"SELECT  *  FROM fee_db where  ft_cat = '".safee($condb,$fcat)."' and Cat_fee = '$stud_cat' and status ='1' and program ='".safee($condb,$class_ID)."' and level ='".safee($condb,$row_utme['level'])."' "); 
+$qschedfee=mysqli_query($condb,"SELECT  *  FROM fee_db where  ft_cat = '".safee($condb,$fcat)."' and session = '".safee($condb,$gsec)."' and Cat_fee = '$stud_cat' and status ='1' and program ='".safee($condb,$class_ID)."' and level ='".safee($condb,$row_utme['level'])."' "); 
 $get_amountin = mysqli_fetch_array($qschedfee);
 if(empty($student_reg)){$mat2 =  $appno;}else{ $mat2 = $row_utme['stud_reg'];}  
-$namount = getDueamt($fcat,$class_ID,$row_utme['level'],$stud_cat);
+$namount = getDueamt($fcat,$class_ID,$row_utme['level'],$stud_cat,0,$row_utme['session']);
 $currentbal = getpayamt($mat2,$fcat,$class_ID,$row_utme['level'],$row_utme['session']);
 $nbal = $currentbal - $amtn;
 $bal = $namount - $amtn;

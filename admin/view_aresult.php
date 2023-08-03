@@ -42,7 +42,9 @@ $rowapp = mysqli_fetch_array($queryresultapp); $aptatus = mysqli_num_rows($query
  <div class="alert alert-info alert-dismissible fade in" role="alert"  id="ccc2"><font color="white" style="text-shadow:0 1px 1px #ff0;">
 Student Results On <?php echo $recode; ?> For <?php echo $semester." Semester ".getlevel($level,$class_ID); ?> level. </font></div>
   <table id="datatable-responsive" class="table table-striped jambo_table bulk_action" cellspacing="0" width="100%" border="1">
-  <div class="panel-heading" style="color:blue;font-size:15px;padding: 9px 6px 9px 0px;" id="ccc3"><b> <center> Student Results On <?php echo $recode; ?> For <?php echo $semester." Semester ".getlevel($level,$class_ID)."  level ,".$session; ?> .</center></b>
+  <div class="panel-heading" style="color:blue;font-size:15px;padding: 9px 6px 9px 0px;" id="ccc3">
+   <b> <center> <?php echo getdeptc($dept) ; ?></center></b>
+  <b> <center> Student Results On <?php echo $recode; ?> For <?php echo $semester." Semester ".getlevel($level,$class_ID)."  level ,".$session; ?> .</center></b>
 </div>
                     <!--<table  class="table table-striped jambo_table bulk_action" border="1"> <div class="btn-group" id="divButtons" name="divButtons">  --!> 
                <div class="btn-group" id="cccv" > 
@@ -79,7 +81,7 @@ Student Results On <?php echo $recode; ?> For <?php echo $semester." Semester ".
                       
  <tbody>
                  <?php
-$viewupco=mysqli_query($condb,"select * from results where course_code ='". safee($condb,$recode) ."' and session ='". safee($condb,$session) ."' and semester='". safee($condb,$semester) ."' and level='". safee($condb,$level) ."' ");
+$viewupco=mysqli_query($condb,"select * from results where dept = '". safee($condb,$dept) ."' and course_code ='". safee($condb,$recode) ."' and session ='". safee($condb,$session) ."' and semester='". safee($condb,$semester) ."' and level='". safee($condb,$level) ."' ");
 		while($row_upfile = mysqli_fetch_array($viewupco)){
 		if(!empty($pmaxn)){ $cell = 5; }else{ $cell = 4;}
 		$course_id = $row_upfile['course_code']; $escore = $row_upfile['exam'];

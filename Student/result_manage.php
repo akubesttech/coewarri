@@ -36,9 +36,10 @@ $que_checkpay=mysqli_query($condb,"select SUM(paid_amount) as samount from payme
                 
 				 <!-- /Organization Setup Form -->
 			
-					<?php 
+					<?php 	$view = (isset($_GET['view']) && $_GET['view'] != '') ? $_GET['view'] : '';
+                    if(!empty($epenable)){
 		if($sumpay >= $com_amount and $sumpay > 0 and $nocomp >= $nocompm){ 
-						$view = (isset($_GET['view']) && $_GET['view'] != '') ? $_GET['view'] : '';
+					
 					switch ($view) {
                 	case 'S_re' :
 		            $content    = 'searchresult.php';		
@@ -66,6 +67,30 @@ $que_checkpay=mysqli_query($condb,"select SUM(paid_amount) as samount from payme
 	message("Access Not Granted ,Payment Information not verified!", "error");
 		redirect(host()."Student/"); 
 					  }
+                      }else{
+                        switch ($view) {
+                	case 'S_re' :
+		            $content    = 'searchresult.php';		
+		            break;
+
+	                case 'l_res' :
+		            $content    = 'result.php';		
+		            break;
+                    
+                     case 'S_re2' :
+		            $content    = 'searchresult2.php';		
+		            break;
+		            case 'l_gp' :
+		            $content    = 'resultgp.php';		
+		            break;
+		           
+		            
+	                default :
+		            $content    = 'result.php';
+				
+                            }
+                     require_once $content;
+                        }
 					/*	$que_warning23=mysqli_query($condb,"select * from payment_tb where stud_reg ='$student_RegNo' and session ='$default_session' and level='".safee($condb,$student_level)."' OR app_no = '$student_appNo' and session ='$default_session'  and level='".safee($condb,$student_level)."'") or die(mysql_error());
 	$warning_count2=mysqli_num_rows($que_warning23);
 $warning_data=mysqli_fetch_array($que_warning23);

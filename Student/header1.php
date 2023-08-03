@@ -39,22 +39,22 @@ $query= mysqli_query($condb,"select * from schoolsetuptd ")or die(mysqli_error($
 <!-- Bootstrap -->
 			<!-- <link href="images/logo.png" rel="icon" type="image"> -->
 			<link href="../images/logo.png" rel="icon" type="image">
-				<link href="admin/bootstrap1/css/index_background.css" rel="stylesheet" media="screen"/>
+				<link href="admin/bootstrap1/css/index_background.css" rel="stylesheet" media="all"/>
 				
 				<link href="../admin/bootstrap1/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
-				<link href="../admin/bootstrap1/css/bootstrap-responsive.min1.css" rel="stylesheet" media="screen"/>
-				<link href="../admin/bootstrap1/css/font-awesome.css" rel="stylesheet" media="screen"/>
-				<link href="../admin/bootstrap1/css/my_style.css" rel="stylesheet" media="screen"/>
-				<link href="../admin/vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="screen"/>
-				<link href="../admin/assets/styles.css" rel="stylesheet" media="screen"/>
+				<link href="../admin/bootstrap1/css/bootstrap-responsive.min1.css" rel="stylesheet" media="all"/>
+				<link href="../admin/bootstrap1/css/font-awesome.css" rel="stylesheet" media="all"/>
+				<link href="../admin/bootstrap1/css/my_style.css" rel="stylesheet" media="all"/>
+				<link href="../admin/vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="all"/>
+				<link href="../admin/assets/styles.css" rel="stylesheet" media="all"/>
 				<!-- calendar css -->
-				<link href="../admin/vendors/fullcalendar/fullcalendar.css" rel="stylesheet" media="screen">
+				<link href="../admin/vendors/fullcalendar/fullcalendar.css" rel="stylesheet" media="all">
 				<!-- index css -->
-				<link href="../admin/bootstrap/css/index.css" rel="stylesheet" media="screen"/>
+				<link href="../admin/bootstrap/css/index.css" rel="stylesheet" media="all"/>
 				<!-- data table css -->
-				<link href="../admin/assets/DT_bootstrap.css" rel="stylesheet" media="screen"/>
+				<link href="../admin/assets/DT_bootstrap.css" rel="stylesheet" media="all"/>
 				<!-- notification  -->
-				<link href="../admin/vendors/jGrowl/jquery.jgrowl.css" rel="stylesheet" media="screen"/>
+				<link href="../admin/vendors/jGrowl/jquery.jgrowl.css" rel="stylesheet" media="all"/>
 				<!-- wysiwug  -->
 				<link rel="stylesheet" type="text/css" href="admin/vendors/bootstrap-wysihtml5/src/bootstrap-wysihtml51.css"/>
 		<script src="../admin/vendors/jquery-1.9.1.min.js"></script>

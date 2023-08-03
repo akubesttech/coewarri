@@ -1,3 +1,4 @@
+
     <section id="content" role="document">
         <main style="min-height: 168px;">
                     <div class="container">
@@ -55,7 +56,7 @@ while($row_s = mysqli_fetch_array($getfaculty_query)){ $facno = $row_s['fac_id']
                             <li>
                             
 <!--<a   onclick="recordClick(<?php echo $facno; ?>);" target="_blank" ><?php echo $number." .". $row_s['fac_name']." ( ".$row_s['fac_desc']." )"; ?></a> --!>
-<a  href="javascript:void(0);" onclick="window.open('post.php?view=Dept&facid=<?php echo $facno;?>','_self')"  ><?php echo $number.". ". $row_s['fac_name']." ( ".$row_s['fac_desc']." )"; ?></a>
+<a  href="javascript:void(0);" onclick="window.open('prog.php?view=Dept&facid=<?php echo $facno;?>','_self')" target="_blank" ><?php echo $number.". ". $row_s['fac_name']." ( ".$row_s['fac_desc']." )"; ?></a>
                             </li>
                             <?php $number ++;}}else{ ?>
                              <li>

@@ -109,7 +109,7 @@ $id = $row_utme['pay_id'];  $feetype = $row_utme['fee_type']; $student_reg = $ro
 if(substr($feetype,0,1) == "B"){ $feet = getfeecat($row_utme['ft_cat']);}else{ $feet = getftype($row_utme['fee_type']);}
 if(empty($row_utme['stud_reg'])){ $fulname = ucwords(getappname($row_utme['app_no']));}else{ $fulname = ucwords(getname($row_utme['stud_reg']));}
 if(empty($student_reg)){$mat2 =  $row_utme['app_no'];}else{ $mat2 = $row_utme['stud_reg'];}
-$namount = getDueamt($sfcat,$class_ID,$row_utme['level'],$stud_cat);
+$namount = getDueamt($sfcat,$class_ID,$row_utme['level'],$stud_cat,0,$row_utme['session']);
 $currentbal = getpayamt($mat2,$sfcat,$class_ID,$row_utme['level'],$row_utme['session']);
 if($is_active == "1"){$amtn = $row_utme['paid_amount']; }else{ $amtn = "0.00"; }
 $nbal = $currentbal - $amtn;

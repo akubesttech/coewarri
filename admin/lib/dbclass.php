@@ -1,15 +1,22 @@
 <?php
 define('DB_DRIVER', 'mysql');
 define('SERVER', 'localhost');
-define('USERNAME', 'deltasma_warrismart');
+define('USERNAME', 'deltasma_warrism');
 define('PASSWORD', 'warrismart_2019j#');
 define('DATABASE', 'deltasma_warrismartdb');
-define('t_gate', 'sk_live_acc1833e651d4a7d3a2a065dd9ddb5e518b55764');//
-//define('t_gate', 'sk_test_f3f8b7eca038827ef24ad9190a83b94ea2bdd6bc');
+define('t_gate', 'sk_live_acc1833e651d4a7d3a2a065dd9ddb5e518b55764');//update to correct key for Base acct
 //other creaditials 
-define('t_ACCTS', ''); //for school
-define('t_ACCTB', ''); // for Bisapp
-define('t_ACCTSP', ''); // for school Penaty Account
+define('t_ACCTS', 'ACCT_tpjoih1jntnm327'); //for school
+define('t_ACCTB', 'ACCT_28lki1e5db88qwq'); // for Bisapp
+define('t_ACCTSP', 'ACCT_x90gsw8kttxpkhh'); // for school Penaty Account
+define('t_ACCT_Dev','ACCT_4kd3q80y36eotfp') ;
+define('t_ACCT_Ent','ACCT_vct0q5vvep676zx') ;
+define('t_ACCT_TP','ACCT_gvx6psq2t4zyq8k') ;
+define('t_ACCT_IT','ACCT_h0rc1d1jhzypd22') ;
+define('t_ACCT_SUG','ACCT_rudobotp9syn57z') ;
+define('t_ACCT_TECH','ACCT_iynwlemltfs8cdy') ;
+define('t_ACCT_JOU','ACCT_k13fla06cufsva3') ;
+
 
 class Database
 {

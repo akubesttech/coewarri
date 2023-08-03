@@ -37,7 +37,7 @@ $enableinst = setinstallment;
 if(substr($_GET['id'],0,1) == "B"){$viewfee_query1 = mysqli_query($condb,"select * from  feecomp_tb where md5(Batchno)='".md5(safee($condb,$_GET['id']))."'")or die(mysqli_error($condb));
 $resultsumnet=mysqli_query($condb,"select SUM(f_amount) as samount from feecomp_tb where md5(Batchno)='".md5(safee($condb,$_GET['id']))."'");
 $row_fsum = mysqli_fetch_array($resultsumnet); $Fee_amount =  $row_fsum['samount']; $cfeecheck = mysqli_num_rows($viewfee_query1);
-$row_fee = mysqli_fetch_array($viewfee_query1);    $Fee_level = $row_fee['level'];
+$row_fee = mysqli_fetch_array($viewfee_query1);    $Fee_level = $row_fee['level']; $Fee_session = $row_fee['session'];
 $Fee_type = $row_fee['Batchno']; $fcat =  $row_fee['fcat']; 
 }else{
 $viewfee_query1 = mysqli_query($condb,"select * from fee_db where md5(fee_id)='".safee($condb,$_GET['id'])."'")or die(mysqli_error($condb));
@@ -193,7 +193,7 @@ while($rssec2 = mysqli_fetch_array($resultsec2))
                        
 						  	  <label for="heard">Academic Session</label>
                             <select name="session" id="session"  required="required" class="form-control">
-  <option value="<?php echo $default_session; ?>"><?php echo $default_session; ?></option><?php echo fill_sec(); ?>
+  <option value="<?php echo $Fee_session; ?>"><?php echo $Fee_session; ?></option><?php echo fill_sec(); ?>
 </select>
                       </div>
                       

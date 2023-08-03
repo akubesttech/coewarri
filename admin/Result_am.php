@@ -93,6 +93,9 @@ $links2 = "Result_am.php?view=caprove&userId=".($get_RegNo)."&Schd=".$dep1."&sec
 		            case 'asheet' :
 		            $content    = 'easheet.php';		
 		            break;
+                    case 'bupload' :
+		            $content    = 'bresultup.php';		
+		            break;
 	                default :
 		            $content    = 'admin_impresult.php';
                          }

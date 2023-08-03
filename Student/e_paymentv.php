@@ -11,8 +11,8 @@ $paystatus12=mysqli_num_rows($paystatus1);
 $payrecordv =mysqli_fetch_array($paystatus1); $transdate  = $payrecordv['pay_date']; $amountdue  = $payrecordv['dueamount'];
 $feetype  = $payrecordv['fee_type']; $transref  = $payrecordv['trans_id']; $transession  = $payrecordv['session'];
 $paymenttype  = $payrecordv['pay_mode']; $paydept  = $payrecordv['department']; $payregno  = $payrecordv['stud_reg']; 
-$payemail  = $payrecordv['email']; $fee_cat  = $payrecordv['ft_cat'];
-
+$payemail  = $payrecordv['email']; $fee_cat  = $payrecordv['ft_cat']; $prog  = $payrecordv['prog'];
+$plev  = $payrecordv['level']; $st_cat  = $payrecordv['stud_cat'];
 ?>
 <div class="x_panel">
                 <!-- <form name="register2" action="https://voguepay.com/pay/" method="post" enctype="multipart/form-data" id="register2"> --!>
@@ -28,7 +28,10 @@ $payemail  = $payrecordv['email']; $fee_cat  = $payrecordv['ft_cat'];
 			<input type='hidden' name='total' value='<?php echo $amountdue ;?>' />
               <input type='hidden' name='matno' value='<?php echo $payregno;?>' />
             <input type='hidden' name='sec' value='<?php echo $transession;?>' />      
-                      
+               <input type='hidden' name='progM' value='<?php echo $prog;?>' /> 
+               <input type='hidden' name='lev' value='<?php echo $plev;?>' />
+               <input type='hidden' name='st_cat' value='<?php echo $st_cat;?>' />
+                       
                       <span class="section">Payment Transaction Summary</span>
 
                     <div class="x_content">
@@ -98,13 +101,13 @@ $payemail  = $payrecordv['email']; $fee_cat  = $payrecordv['ft_cat'];
  <?php if(substr($feetype,0,1) == "B"){ $paycomponent=mysqli_query($condb,"SELECT * FROM feecomp_tb  WHERE Batchno ='".safee($condb,$feetype)."' ");
 $serial=1;		 while($row_utme = mysqli_fetch_array($paycomponent)){ $ftypecon = $row_utme['feetype']; $amount = $row_utme['f_amount'];
 $paysession = $row_utme['session']; $feecategory = $row_utme['fcat']; $penalty = $row_utme['penalty']; if($penalty > 0){ $pens = " ( penalty inclusive).";}else{ $pens ="";} ?>
-							<tr><td><?php echo $serial++ ; ?></td>
+							<tr style="display:none;"><td><?php echo $serial++ ; ?></td>
                                 <td><?php echo "Payment Of " .getftype($ftypecon) ;?></td>
                                 <td><!--<strike>N</strike>--!> &#8358;<?php echo " ".number_format($amount,2); ?></td>
                                 <td><?php echo $paysession ;?></td>
                                 <td> <?php echo getfeecat($feecategory).$pens ;?> </td></tr>
 	<?php	}}else{  ?> 
-						 <tr><td>1</td>
+						 <tr style="display:none;"><td>1</td>
                                 <td><?php echo "Payment Of " .getftype($feetype)." For ".$transession ;?></td>
                                  
                                 <td><!--<strike>N</strike>--!> &#8358;<?php echo " ".number_format($amountdue,2); ?></td>
@@ -112,6 +115,15 @@ $paysession = $row_utme['session']; $feecategory = $row_utme['fcat']; $penalty =
                                 <td> <?php echo getfeecat($feecategory).$pens ;?>
                                 </td>
                               </tr><?php	}  ?>
+                              
+                              <tr><td>1</td>
+                                <td><?php echo "Payment Of " .getfeecat($feecategory)." For ".$transession ;?></td>
+                                 
+                                <td><!--<strike>N</strike>--!> &#8358;<?php echo " ".number_format($amountdue,2); ?></td>
+                                <td><?php echo $transession ;?></td>
+                                <td> <?php echo getfeecat($feecategory).$pens ;?>
+                                </td>
+                              </tr>
                              <tr>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>

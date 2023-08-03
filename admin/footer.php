@@ -203,8 +203,8 @@ document.all.ccc3.style.visibility = 'visible';
 					
                var startd = document.getElementById('ed2').value;
                var endd = document.getElementById('ed3').value;
-              // var mday = document.getElementById('mday').value;
-               var queryString = "?ed2=" + startd + "&ed3=" + endd;
+              var bkey = document.getElementById('bkey').value;
+               var queryString = "?ed2=" + startd + "&ed3=" + endd + "&bkey=" + bkey;
             
               // queryString +=  "&mmonth=" + mmonth + "&mday=" + mday;
                ajaxRequest.open("GET", "remPayreport.php" + queryString, true);
@@ -226,8 +226,104 @@ document.all.ccc3.style.visibility = 'visible';
 }
 document.getElementById("defaultOpen").click();
 
+function ajaxUploadedResults(){
+               var ajaxRequest;  // The variable that makes Ajax possible!
+               try {
+                  // Opera 8.0+, Firefox, Safari
+                  ajaxRequest = new XMLHttpRequest();
+               }catch (e) {
+                  // Internet Explorer Browsers
+                  try {
+                     ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
+                  }catch (e) {
+                     try{
+                        ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                     }catch (e){
+                        // Something went wrong
+                        alert("Your browser broke!");
+                        return false;
+                     }
+                  }
+               }
+               
+               // Create a function that will receive data 
+               // sent from the server and will update
+               // div section in the same page.
+					
+               ajaxRequest.onreadystatechange = function(){
+                  if(ajaxRequest.readyState == 4){
+                     var ajaxDisplay = document.getElementById('ajaxDivn');
+                     ajaxDisplay.innerHTML = ajaxRequest.responseText;
+                     $("#mytable").dataTable().clear().destroy();
+                  }
+               }
+               
+               // Now get the value from user and pass it to
+               // server script.
+              var dpt = document.getElementById('dept1').value;
+               var cos = document.getElementById('cos').value;
+              var sec = document.getElementById('sec').value;
+              var sem = document.getElementById('sem').value;
+              var level = document.getElementById('level').value;
+               var queryString = "?dept1=" + dpt + "&cos=" + cos + "&sec=" + sec + "&sem=" + sem + "&level=" + level;
+            ajaxRequest.open("GET", "resupload.php" + queryString, true);
+               ajaxRequest.send(null); 
+               
+            }
 
+// load penalty check
+    function showpcheck(str)
+{if (str==""){
+  //document.getElementById("txtroomno").innerHTML="Amount was Not Loaded Because Form Type was Not Selected";
+ // return;
+  } if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();}else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");}
+xmlhttp.onreadystatechange=function(){
+if (xmlhttp.readyState==4 && xmlhttp.status==200){
+    document.getElementById("loadcheck").innerHTML=xmlhttp.responseText;
+    
+    }}
+xmlhttp.open("GET","loadp_check.php?q="+str,true);
+xmlhttp.send();}
 
+ $(document).ready(function(){
+		              $('#addsession1').tooltip('show');
+		              $('#addsession1').tooltip('hide');
+		              });
+                      
+                      	//check student matno exemption to fee
+            function getMatex(val){
+                
+            $.ajax({
+                url: 'gettrans.php',
+                type: 'POST',
+                data: 'matnoex='+val,
+                dataType: 'json',
+                success:function(data){
+                    var len = data.length;
+                    var txtrbut1 = document.getElementById("addexempt");
+                   var txtrbut2 = document.getElementById("goback");
+                    if(len > 0){
+                        var id = data[0]['Regm'];
+                        var regno = data[0]['Reg2'];
+                          var fullname = data[0]['fullname'];
+                      document.getElementById('fullname').value = fullname;
+                      document.getElementById('mno').value = regno;
+                        txtrbut1.style.display = "block";
+                       txtrbut2.style.display = "block";
+                  }else{
+                    document.getElementById('fullname').value = "";
+                    document.getElementById('mno').value = "";
+                   txtrbut1.style.display = "none";
+                   txtrbut2.style.display = "none";
+                  
+                    }     //alert(name);
+                } 
+            });
+        }	       
 </script>
 
     
@@ -304,27 +400,4 @@ document.getElementById("defaultOpen").click();
 		
   </body>
 </html>
- <script type="text/javascript">
-		              $(document).ready(function(){
-		              $('#addsession1').tooltip('show');
-		              $('#addsession1').tooltip('hide');
-		              });
-
-// load penalty check
-    function showpcheck(str)
-{if (str==""){
-  //document.getElementById("txtroomno").innerHTML="Amount was Not Loaded Because Form Type was Not Selected";
- // return;
-  } if (window.XMLHttpRequest)
-  {// code for IE7+, Firefox, Chrome, Opera, Safari
-  xmlhttp=new XMLHttpRequest();}else
-  {// code for IE6, IE5
-  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");}
-xmlhttp.onreadystatechange=function(){
-if (xmlhttp.readyState==4 && xmlhttp.status==200){
-    document.getElementById("loadcheck").innerHTML=xmlhttp.responseText;
-    
-    }}
-xmlhttp.open("GET","loadp_check.php?q="+str,true);
-xmlhttp.send();}
-		             </script>
+ 

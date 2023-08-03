@@ -578,7 +578,7 @@ while($rsblocks = mysqli_fetch_array($resultblocks))
 <div class="form-group"><input class="form-control input-sm" id="phone" type="text" pattern="[+]?[\.\s\-\(\)\*\#0-9]{3,}" onkeypress="return isNumber(event);" maxlength="11" name="phone_no" required="required" tabindex="1" value="<?php echo $find_old['fphone']; ?>"/></div></div>
 			    			<div class="col-xs-6 col-sm-6 col-md-4">
 			    				<label class="head">Email Address *</label>
-			    					<div class="form-group"> <input type="text" class="form-control input-sm" name="gemail" id="email" tabindex="4" value="<?php echo $find_old['femail']; ?>" >	</div>
+			    					<div class="form-group"> <input type="text" class="form-control input-sm" name="gemail" id="email" tabindex="4" value="<?php echo $find_old['femail']; ?>" required="required" >	</div>
 			    				</div>
 			    				<div class="col-xs-6 col-sm-6 col-md-4">
 			    				<label class="head" id="s1_chalenge">Contact Address</label><div class="form-group"><textarea name="contactaddress" id="contactaddress" tabindex="2" class="form-control input-sm"> <?php echo $address_e; ?></textarea></div>
@@ -816,7 +816,14 @@ if($num_pin2 > 0){
  
   <div class="wrapper">
 <?php  if($num_pin2 > 0){ $sn1=1; while($orow1 = mysqli_fetch_array($sql_oresult1)){   $id = $orow1['rec_id']; ?><br>
-<div class="row<?php echo $id ?>"><input type="hidden" name="selector[]" value="<?php echo $id; ?>"><div class="col-xs-1 col-sm-1 col-md-1"><?php echo $sn1++ ?></div><div class="col-xs-6 col-sm-6 col-md-3" ><div class="form-group"  ><select class="form-control input-sm"   name="suba[]<?php echo $id; ?>"  required="required"  ><option value="<?php echo $orow1['oSub1'];  ?>"><?php echo getf_sub($orow1['oSub1']);  ?></option><?php  echo fill_sub();?> </select></div></div> <div class="col-xs-6 col-sm-6 col-md-3" ><div class="form-group"  ><select class="form-control input-sm"   name="gradea[]<?php echo getfgrade($orow1['oGrade_1']);  ?>" required="required"   ><option value="<?php echo $orow1['oGrade_1'];  ?>"><?php echo getfgrade($orow1['oGrade_1']);  ?></option><?php  echo fill_grade();?> </select></div></div><a  class="btn btn-danger" id="<?php echo $id; ?>" >X</a></div>
+<div class="row<?php echo $id ?>"><input type="hidden" name="selector[]" value="<?php echo $id; ?>">
+<div class="col-xs-1 col-sm-1 col-md-1"><?php echo $sn1++ ?></div><div class="col-xs-6 col-sm-6 col-md-3" >
+<div class="form-group"  ><select class="form-control input-sm"   name="suba[]<?php echo $id; ?>"  required="required"  >
+<option value="<?php echo $orow1['oSub1'];  ?>"><?php echo getf_sub($orow1['oSub1']);  ?></option>
+<?php  echo fill_sub();?> </select></div></div> <div class="col-xs-6 col-sm-6 col-md-3" >
+<div class="form-group"  ><select class="form-control input-sm"   name="gradea[]<?php echo getfgrade($orow1['oGrade_1']);  ?>" required="required"   >
+<option value="<?php echo $orow1['oGrade_1'];  ?>"><?php echo getfgrade($orow1['oGrade_1']);  ?></option>
+<?php  echo fill_grade();?> </select></div></div><a  class="btn btn-danger" id="<?php echo $id; ?>" >X</a></div>
 <?php }}  ?>
 <br>
 </div>

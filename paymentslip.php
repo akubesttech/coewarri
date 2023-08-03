@@ -13,7 +13,7 @@ $applcation_id = $rsprint['app_no'];
 $student_reg = $rsprint['stud_reg']; $tranD = MD5($rsprint['trans_id']);  $smato = $row['smat'];  $student_email = $rsprint['email'];
  if(empty($student_reg)){  $mat2 = $applcation_id;
     $student_level = $rsprint['level']; $student_prog = $rsprint['prog']; $idtype = "Application Number "; }else{
-        include('Student/session.php');   if(!empty($smato)){ $idtype = "Username "; $mat2 = $student_reg;  }else{
+        include('Student/session.php'); $student_level = $rsprint['level'];  if(!empty($smato)){ $idtype = "Username "; $mat2 = $student_reg;  }else{
         $idtype = "Matric Number "; $mat2 = $student_reg; }}
   $existl = imgExists("admin/".$row['Logo']);
 if($dform_checkexist20 < 1){ //message("The page you are trying to access is not Available.", "error");

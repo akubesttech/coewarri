@@ -264,7 +264,15 @@ while($rssec2 = mysqli_fetch_array($resultsec2)){ echo "<option value='$rssec2[l
                     <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback" >
 <label for="chkPenalty"> </label><br><br><label class="chkPenalty">
 <input type="checkbox" id="chkPenalty"  name="chkPenalty" value="1" disabled /> Payment Date : </label></div>
-  
+   <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
+                       <label for="heard">Account (optional)</label>
+                            	  <select name='bkey' id="bkey" class="form-control">
+                           <option value=''>Select All Accounts</option>
+                            <?php  $qrybank = mysqli_query($condb,"SELECT * FROM bank   ORDER BY acc_name  ASC");
+while($rsbank = mysqli_fetch_array($qrybank)){?>
+    <option value='<?php echo $rsbank['b_sort'];?>'><?php echo $rsbank['b_name']." (".$rsbank['acc_num'].")"; ?></option><?php }?>
+                          </select>
+                      </div>
                     <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback"   id="enable3">
 						  	  <label for="heard">From: </label>
 <input  type="text" name="pdate3" size="25"   class="w8em format-d-m-y highlight-days-67 range-middle-today" id="ed2"   readonly="readonly" style="height:32px;" required></div>

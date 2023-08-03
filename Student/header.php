@@ -153,7 +153,15 @@ position: fixed;
 			font-family:Verdana, Geneva, sans-serif; 
 	font-size:12px; 
 }
-
+.txt-heading{padding: 5px 10px;font-size:1.1em;font-weight:bold;color:#999;}
+a.btnRemoveAction{color:#D60202;border:0;padding:2px 10px;font-size:0.9em;}
+a.btnRemoveAction:visited{color:#D60202;border:0;padding:2px 10px;font-size:0.9em;}
+#shopping-cart {border-top: #79b946 2px solid;margin-bottom:30px;}
+#shopping-cart .txt-heading{background-color: #D3F5B8;}
+#btnEmpty{background-color:#D60202;border:0;padding:1px 10px;color:#FFF; font-size:1.0em;font-weight:normal;float:right;text-decoration:none;}
+.cart-item {border-bottom: #79b946 1px dotted;padding: 10px;}
+.clear-float{clear:both;margin-bottom:10px;}
+.cart-action{cursor:pointer;}
 	</style>
 
 

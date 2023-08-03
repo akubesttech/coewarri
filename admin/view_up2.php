@@ -26,85 +26,79 @@ message("You don't have the permission to access this page", "error");
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+                  
                     <p class="text-muted font-13 m-b-30">
                   
                     </p>
                   <div class="alert alert-info alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span>
                     </button>
-        This page will Enable you to Delete Wrongly uploaded Result. <?php //echo $admin_valid ; datatable-buttons ?>
+        This page will Enable you to View / Delete Wrongly uploaded Result. <?php //echo $admin_valid ; datatable-buttons ?>
+                  </div>
+                  <div> <table><form action="" method="post">
+   <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
+                       <label for="heard"><?php echo $SGdept1; ?></label>
+                            	  <select name="dept1" id="dept1" required="required"  class="form-control"  >
+                           <option value="">Select <?php echo $SGdept1; ?></option>
+                              <?php $querydep = mysqli_query($condb,"SELECT * FROM dept ORDER BY d_name ASC");
+while($depart = mysqli_fetch_array($querydep)){echo "<option value='$depart[dept_id]'>$depart[d_name]</option>";	}?>
+                          </select>
+                      </div>
+                      
+                      <div class="col-md-2 col-sm-2 col-xs-12 form-group has-feedback">
+                       <label for="heard">Course Code</label>
+                            	  <select name="cos" id="cos" required="required" class="form-control"  >
+                           <option value="">Select Courses</option>
+                           <?php $qcourse = mysqli_query($condb,"SELECT DISTINCT course_code FROM results ORDER BY course_code ASC");
+while($courseup = mysqli_fetch_array($qcourse)){echo "<option value='$courseup[course_code]'>$courseup[course_code]</option>";	}?>
+                          </select>
+                      </div>
+                      
+<div class="col-md-2 col-sm-2 col-xs-12 form-group has-feedback">
+                       <label for="heard">Academic Session</label>
+                            <select name="sec" id="sec"  required="required" class="form-control">
+  <option value="">Select..</option><?php echo fill_sec(); ?>
+</select></div>
+                      
+                      <div class="col-md-2 col-sm-2 col-xs-12 form-group has-feedback">
+						  	  <label for="heard">Semester</label>
+                            	  	 <select class="form-control" name="sem" id="sem"  required="required">
+<option value="">Select..</option>
+<option value="First">First</option>
+<option value="Second">Second</option></select>
+                      </div>
+                      
+                      	   <div class="col-md-2 col-sm-2 col-xs-12 form-group has-feedback">
+						  	  <label for="heard">Level</label>
+                            	  	 <select class="form-control" name="level" id="level"  required="required">
+<option value="">Select..</option>
+<?php $resultsec2 = mysqli_query($condb,"SELECT * FROM level_db where prog = '$class_ID'  ORDER BY level_order ASC");
+while($rssec2 = mysqli_fetch_array($resultsec2)){echo "<option value='$rssec2[level_order]'>$rssec2[level_name]</option>";	}?>
+ </select>
+                      </div>
+                        <div  class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback" ><div id="cccv2" >
+ <?php   if (authorize($_SESSION["access3"]["rMan"]["vure"]["view"])){ ?> 
+    <button   name="uploadedresults" id="uploadedresults"  type="button" onclick = 'ajaxUploadedResults()'  class="btn btn-primary " title="Click to Search Uploaded Results" ><i class="fa fa-search"></i> Search  </button> 
+   
+   <script type="text/javascript">$(document).ready(function(){
+	                                            $('#searchrem').tooltip('show');
+	                                            $('#searchrem').tooltip('hide');
+	                                            });     </script> <?php } ?><hr/>
+                                                
+  </div></div>
+  </form>                    
+</table>
                   </div>
                   
-                    <form action="Delete_adminupresult.php" method="post">
-                    
-                    <table id="datatable-responsive" class="table table-striped table-bordered"><?php   if (authorize($_SESSION["access3"]["rMan"]["vure"]["delete"])){ ?>
-                  <a data-placement="top" title="Click to Delete check item"   data-toggle="modal" href="#delete_adminupresult" id="delete"  class="btn btn-danger" name=""  ><i class="fa fa-trash icon-large"> Delete</i></a> <?php } ?>
-                    	&nbsp;&nbsp;&nbsp;  <!--	
-								<a href="new_apply.php?view=imp_a" class="btn btn-info"  id="delete2" data-placement="right" title="Click to import Student UTME Exam Result" ><i class="fa fa-file icon-large"></i> Import Data</a> --!>
-									<script type="text/javascript">
-									 $(document).ready(function(){
-									 $('#delete').tooltip('show'); $('#delete1').tooltip('show'); $('#delete2').tooltip('show');
-									 $('#delete').tooltip('hide'); 	 $('#delete1').tooltip('hide'); $('#delete2').tooltip('hide');
-									 });
-									</script>
-										<?php include('../admin/modal_delete.php'); ?>
-                      <thead>
-                        <tr>
-                         <th><input type="checkbox" name="chkall" id="chkall" onclick="return checkall('selector[]');"></th>
-                         <th>Course Code</th>
-                          <th>Course Title</th>
-                          <th>Session</th>
-                          <th>Semester</th>
-                          <th>Level</th>
-                          <th>Date Uploaded</th>
-                          <th>Uploaded By</th>
-                         <th>View Info</th>
-                        </tr>
-                      </thead>
-                      
-                      
- <tbody>
-                 <?php
+<form action="Delete_adminupresult.php" method="post">
+                   <div style="width: 100%;" style="overflow: auto;" id = 'ajaxDivn'>
 
-//$depart = $_GET['dept1_find'];
-//$session=$_GET['session2'];
-//$entry_mode= $_GET['moe2'];
-//and session ='".$default_session."'  and semester='".$default_semester."'
-$queryup = "select * from uploadrecord where prog = '".safee($condb,$class_ID)."' ";
-if ($Rorder > 2 ){$queryup .= " and staff_id = '".safee($condb,$session_id)."'"; }
-$queryup .= "ORDER BY up_id desc limit 0,500";
-$viewupco=mysqli_query($condb,$queryup);
-while($row_upfile = mysqli_fetch_array($viewupco)){
-		$id = $row_upfile['up_id']; $scat = $row_upfile['scat'];
-		$course_id = $row_upfile['course'];
-?>     
-<tr>
-                        	<td width="30" >
-<input id="optionsCheckbox" class="uniform_on1" name="selector[]" type="checkbox" value="<?php echo $id; ?>">
-												</td>
-						<td><?php  echo $row_upfile['course']; ?></td>
-                          <td><?php echo getcourse($row_upfile['course']); ?></td>
-                          <td><?php echo $row_upfile['session']; ?></td>
-                          <td><?php echo $row_upfile['semester']; ?></td>
-                          <td><?php echo getlevel($row_upfile['level'],$class_ID); ?></td>
-                           <td><?php echo $row_upfile['date_up']; ?></td>
-<td><?php if($scat > 1){ echo getstaff2($row_upfile['staff_id']); }elseif($scat == 1){echo getadmin2($row_upfile['staff_id']); }else{ echo "unknown staff" ;};
-					//	}else{ echo getstaffr($row_upfile['staff_id']);}
-					
-							 ?></td>
-                          
-												<td width="90"><?php   if (authorize($_SESSION["access3"]["rMan"]["vure"]["view"])){ ?>
-			<a rel="tooltip"  title="View Student Results For The selected Course <?php echo $row_upfile['course']; ?>" id="delete1" href="?view=v_ares&userId=<?php echo $id;?>" 	  data-toggle="modal" class="btn btn-info"><i class="fa fa-file icon-large"> View Result</i></a> <?php } ?>
-												</td>
-                        </tr>
-                     
-                     
-                        <?php } ?>
-                      </tbody>
-                      
-                      
+                    
+                    </div>
+                    
                       	</form>
-                    </table>
+                    
+                    
                   </div>
                 </div>
               </div>

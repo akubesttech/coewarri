@@ -1,5 +1,8 @@
 
-<?php  include('header.php'); ?>
+<?php  
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+include('header.php'); ?>
 <?php include('session.php'); ?>
 	
 		    	
@@ -39,16 +42,38 @@ $sql2="select * from coursereg_tb where course_id ='".$id[$i]."' and sregno= '".
 $result2=mysqli_query($condb,$sql2) or die(mysqli_error($condb));
 if(mysqli_num_rows($result2)>0)
 {mysqli_query($condb,"update coursereg_tb  set creg_status='1',session = '".safee($condb,$default_session)."',semester='".safee($condb,$semester)."',c_unit='".safee($condb,$C_unit)."',lect_approve ='0' and dept = '".safee($condb,$student_dept)."' where sregno='".$student_RegNo."' and course_id ='".$id[$i]."' ")or die(mysqli_error($condb));
-$import = mysqli_query($condb,"REPLACE INTO results (student_id,course_code,course_id,dept,level,session,semester,c_unit,assessment,exam,total,grade,gpoint,qpoint) VALUES ('".$student_RegNo."','".$C_code."','".$C_id."','".$student_dept."','".$C_level."','".$default_session."','".$semester."', ".$C_unit.",'1','1','1','".grading($ntotal,$student_prog)."','".gradpoint($ntotal,$student_prog)."','0.00')") or die(mysqli_error($condb));
+$import = mysqli_query($condb,"REPLACE INTO results (student_id,course_code,course_id,dept,level,session,semester,c_unit,assessment,exam,total,grade,gpoint,qpoint,prog) VALUES ('".$student_RegNo."','".$C_code."','".$C_id."','".$student_dept."','".$C_level."','".$default_session."','".$semester."', ".$C_unit.",'1','1','1','".grading($ntotal,$student_prog)."','".gradpoint($ntotal,$student_prog)."','0.00','".$student_prog."')") or die(mysqli_error($condb));
 }else{
 $query="insert into coursereg_tb(sregno,course_id,c_code,level,semester,c_unit,session,dept,creg_status,lect_approve)values('".$_SESSION['regno']."','".$C_id."','".$C_code."','".$C_level."','".$semester."','".$C_unit."','".$default_session."','".safee($condb,$student_dept)."','1','0')";
 $result2=mysqli_query($condb,$query) or die(mysqli_error($condb));
-$import = mysqli_query($condb,"REPLACE INTO results (student_id,course_code,course_id,dept,level,session,semester,c_unit,assessment,exam,total,grade,gpoint,qpoint) VALUES ('".$student_RegNo."','".$C_code."','".$C_id."','".$student_dept."','".$C_level."','".$default_session."','".$semester."', ".$C_unit.",'1','1','1','".grading($ntotal,$student_prog)."','".gradpoint($ntotal,$student_prog)."','0.00')") or die(mysqli_error($condb));
+$import = mysqli_query($condb,"REPLACE INTO results (student_id,course_code,course_id,dept,level,session,semester,c_unit,assessment,exam,total,grade,gpoint,qpoint,prog) VALUES ('".$student_RegNo."','".$C_code."','".$C_id."','".$student_dept."','".$C_level."','".$default_session."','".$semester."', ".$C_unit.",'1','1','1','".grading($ntotal,$student_prog)."','".gradpoint($ntotal,$student_prog)."','0.00','".$student_prog."')") or die(mysqli_error($condb));
 }}
 message("Selected Outstanding Course (s) was successfully registered", "success");
 redirect('course_manage.php?view=S_CO'); }}
 
 
+//$_SESSION['secc']="";
+//$_SESSION['levc']="";
+//$_SESSION['semc']="";
+if(isset($_POST['Screg'])){
+$SesM = $_POST['session'];
+$levelM = $_POST['level'];
+$SemM = $_POST['semester'];
+$querysrec = "SELECT * FROM coursereg_tb WHERE session ='".safee($condb,$SesM)."' AND sregno='".safee($condb,$student_RegNo)."'";
+if(!empty($levelM)){$querysrec .= " AND level ='".safee($condb,$levelM)."'";}
+$result_alldept=mysqli_query($condb,$querysrec)or die(mysqli_error($condb));
+$num_alldept = mysqli_num_rows($result_alldept);
+if($num_alldept < 1){
+message("ERROR: No Course Registration Information Found , Please Try Again .", "error");
+ redirect('course_manage.php?view=c_reg');
+}else{
+    $_SESSION['secc']="";
+$_SESSION['levc']="";
+$_SESSION['semc']="";
+    $_SESSION['secc']=$SesM;  $_SESSION['levc']=$levelM;
+	$_SESSION['semc']=$SemM;
+redirect('course_manage.php?view=r_co');
+}}
 
     
 if(empty($student_RegNo)){ $que_checkpay=mysqli_query($condb,"select SUM(paid_amount) as samount from payment_tb where app_no = '".safee($condb,$student_appNo)."' and session ='".safee($condb,$default_session)."' and pay_status='1' and ft_cat='1' and level = '".safee($condb,$student_level)."' ");}else{
@@ -68,9 +93,11 @@ $que_checkpay=mysqli_query($condb,"select SUM(paid_amount) as samount from payme
 	                case 'l_out' :
 		            $content    = 'outstandingcourse.php';		
 		            break;
-                    
-                     case 'r_co' :
+                    case 'r_co' :
 		            $content    = 'Registered_course.php';		
+		            break;
+                    case 'c_reg' :
+		            $content    = 'searchCreg.php';		
 		            break;
 		             case 'l_c' :
 		            $content    = 'loadedcourse.php';		
@@ -93,11 +120,13 @@ $que_checkpay=mysqli_query($condb,"select SUM(paid_amount) as samount from payme
 	                case 'l_out' :
 		            $content    = 'outstandingcourse.php';		
 		            break;
-                    
-                     case 'r_co' :
-		            $content    = 'Registered_course.php';		
-		            break;
-		             case 'l_c' :
+                    case 'r_co' :
+		            $content    = 'Registered_course.php';
+                    break;
+                    case 'c_reg' :
+		            $content    = 'searchCreg.php';		
+		            break;		
+		            case 'l_c' :
 		            $content    = 'loadedcourse.php';		
 		            break;
 		            
@@ -131,7 +160,7 @@ $que_checkpay=mysqli_query($condb,"select SUM(paid_amount) as samount from payme
         <!-- /page content -->
         
   
-
+<script> </script>
 
 
          <?php include('footer.php'); ?>

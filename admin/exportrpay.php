@@ -84,7 +84,7 @@ if(empty($student_reg)){$matn = $fetch['app_no'];}else{ $matn = $fetch['stud_reg
  if($is_active == "1"){$amtn = $fetch['paid_amount']; }else{ $amtn = "0.00"; }
 $forderquery = mysqli_query($condb,"select pay_status,paid_amount from payment_tb where pay_status > 0 and paid_amount > 0 and pay_id ='".safee($condb,$id)."'")or die(mysqli_error($condb));
 //get Sccheduled Fee
-$namount = getDueamt($fcat,$class_ID,$fetch['level'],$stud_cat);
+$namount = getDueamt($fcat,$class_ID,$fetch['level'],$stud_cat,0,$fetch['session']);
 $currentbal = getpayamt($matn,$fcat,$class_ID,$fetch['level'],$fetch['session']);
 $nbal = $currentbal - $amtn;
 $bal = $namount - $nbal - $amtn; 

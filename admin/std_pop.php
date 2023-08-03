@@ -92,7 +92,8 @@ echo "<div class='sticky'><center><font size=25 color=green >Verified</font></ce
           </tr>
           <tr style="border: 1px solid #98C1D1;"> <td style="font-weight: bold;font-size:22px;"colspan="5"><?php echo ucwords($row_b['FirstName']).'  '.ucwords($row_b['SecondName']).' '.ucwords($row_b['Othername']); ?></td></tr>
           
-          <tr style="border: 1px solid #98C1D1;"> <td height="30" style="font-weight: bold;" >Gender :</td> <td style="font-color:gray;  font-weight:normal;"><?php echo $row_b['Gender'] ;?> 
+          <tr style="border: 1px solid #98C1D1;"> 
+          <td height="30" style="font-weight: bold;" >Gender :</td> <td style="font-color:gray;  font-weight:normal;"><?php echo $row_b['Gender'] ;?> 
           </td>
           <td style="font-weight: bold;width:150px;">Hobbies</td><td  style="font-color:gray;  font-weight:normal; height: 34px;width: 350p;">
            <?php echo ucwords($row_b['hobbies']); ?></td>

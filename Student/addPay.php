@@ -8,6 +8,15 @@ $query= mysqli_query($condb,"select * from schoolsetuptd ")or die(mysqli_error($
 							  $row_C = mysqli_fetch_array($query);
 							  $s_utme = $row_C['p_utme']; $smato = $row_C['smat'];
                               $sshow = $stud_row['istatus'];  $semailo = $stud_row['e_address'];
+                              function nagitive_check($value){
+if (isset($value)){
+    if (substr(strval($value), 0, 1) == "-"){
+    return '0';
+} else {
+    return $value;
+}
+    }
+}
 						?>
                     <h2>Make Payment (s):</h2>
                     <ul class="nav navbar-right panel_toolbox">
@@ -19,7 +28,7 @@ $query= mysqli_query($condb,"select * from schoolsetuptd ")or die(mysqli_error($
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="x_content" id="paymain" >
                     <p class="text-muted font-13 m-b-30">
                   
                     </p>
@@ -78,26 +87,37 @@ $query= mysqli_query($condb,"select * from schoolsetuptd ")or die(mysqli_error($
                       </div> </tr></table>
                       <!-- /.row -->
                       <div id="print_content"> 
+                      
                     <?php $enableinst = setinstallment;
 $depart = isset($_GET['dept1_find']) ? $_GET['dept1_find'] : '';
-$level = isset($_GET['level']) ? $_GET['level'] : '';
-$semester = isset($_GET['semester']) ? $_GET['semester'] : '';
+$level = isset($_REQUEST['level']) ? $_REQUEST['level'] : '';
+$sec = isset($_REQUEST['session']) ? $_REQUEST['session'] : '';
+if(!empty($level)){ $sleven = $level; $s_sec = $sec;}else{ $sleven = $student_level; $s_sec = $default_session ;}
 $user_queryst = mysqli_query($condb,"select * from student_tb where stud_id = '".safee($condb,$session_id)."'")or die(mysqli_error($condb));
 $user_rowstate = mysqli_fetch_array($user_queryst);
 $states = $user_rowstate['state']; $pn2 = $user_rowstate['RegNo']; $ft = "8";
 $student_s = "Delta";
 if($states == "Delta"){ $stud_from = "1";}else{ $stud_from = "0";}
-$laspdate = getlpdate($pn2,$ft,$student_prog,$student_level,$default_session,$stud_from); 
-$sumpay1 = getpayamt($pn2,$ft,$student_prog,$student_level,$default_session); //$warning_data['samount']; 
-$duep1 = getDueamt($ft,$student_prog,$student_level,$stud_from); ?>
+$laspdate = getlpdate($pn2,$ft,$student_prog,$sleven,$s_sec,$stud_from); 
+$sumpay1 = getpayamt($pn2,$ft,$student_prog,$sleven,$s_sec); //$warning_data['samount']; 
+$duep1 = getDueamt($ft,$student_prog,$sleven,$stud_from,0,$s_sec); 
+ ?> 
+ 	<h2 class="panel-title1"><hr>Please Choose payment plan </h2>
+ <button name="part" class="btn btn-default" style="background-color:#3CB043;" id="pbtn" data-placement="right" type="button" onclick='partpay()' title="Click to make part payment" >Part Payment</button>			 			
+       <button name="full" class="btn btn-default" id="fbtn" data-placement="right" type="button" onclick='fullpay()' title="Click to make full payment " >Full Payment</button>	
+                  <hr>
                       <form method="post" class="form-horizontal"  action="" enctype="multipart/form-data">
                       <tr><td>
   <div  style="color:blue;font-size:15px;text-align: center;"><b><?php if($laspdate < 1 ){ ?>
-  Listed Below are Your Due Payment(s) For The Session and also Note that Checked Payment(s) are required to proceed<?php }else{
-  if($sumpay1 >= $duep1 ){echo $mesg1 = "Listed Below are Your Due Payment(s) For The Session and also Note that Checked Payment(s) are required to proceed"; }else{ echo $mesg1 = "Make Your Late Payment Penalty Fee To Continue"; }   
+  <div id="hmsg">You Have Selected Part Payment Plan </div>
+  <!--Listed Below are Your Due Payment(s) For The Session and also Note that Checked Payment(s) are required to proceed --!><?php }else{
+  if($sumpay1 >= $duep1 ){//echo $mesg1 = "Listed Below are Your Due Payment(s) For The Session and also Note that Checked Payment(s) are required to proceed";
+  echo $mesg1 = "<div id='hmsg'>    You Have Selected Part Payment Plan </div>";
+   }else{ echo $mesg1 = "Make Your Late Payment Penalty Fee To Continue"; }   
   } ?> </b></div></td></tr>
                     <table   class="table table-striped table-bordered" border="0" style="max-width: 1150px;">
  <div id="cccv">
+ 	   
                     <button type="submit" name="addpay"  id="save" data-placement="right" class="btn btn-primary" title="Click to add Payment and Conutinue" ><i class="fa fa-plus-circle icon-large"></i> Add Payment (s)</button>
                     <a data-placement="top" style="display: none;" title="Click to Load The Available Banks You can make payments"    data-toggle="modal" href="#myModal200" id="delete"  class="btn btn-primary" name="delete_course" ><i class="fa fa-external-link icon-large"> View Bank</i></a>
 					<a rel="tooltip"  href="javascript:void(0);" title="Print Details"  onClick="return Clickheretoprint();" class="btn btn-default"><i class="fa fa-print icon-large"> Print</i></a>			
@@ -109,7 +129,7 @@ $duep1 = getDueamt($ft,$student_prog,$student_level,$stud_from); ?>
 									</script>
 									
                       <thead>
-                        <tr class="row2">
+                        <tr class="row2" id="pheader" style="background-color:#3CB043 ;">
                          <th><!--<input type="checkbox" name="chkall" id="chkall" onclick="return checkall('selector[]');">--!></th>
                          <th>S/N</th>
 						 <th>Payment Description</th>
@@ -127,8 +147,8 @@ $duep1 = getDueamt($ft,$student_prog,$student_level,$stud_from); ?>
                  <?php 
 
 if($sumpay1 >= $duep1 ){ $catp = "1"; }else{  $catp = "8"; } 
-$Qviewfee = "select * from fee_db where  Cat_fee = '".safee($condb,$stud_from)."' and level = '".safee($condb,$student_level)."' and program = '".safee($condb,$student_prog)."'  ";
- //if(!empty($enableinst)){$Qviewfee .= " and status = '1'  ";}
+$Qviewfee = "select * from fee_db where  Cat_fee = '".safee($condb,$stud_from)."' and session = '".safee($condb,$s_sec)."' and level = '".safee($condb,$sleven)."' and program = '".safee($condb,$student_prog)."'  ";
+// if(!empty($enableinst)){$Qviewfee .= " and status = '1'  ";}
 if($acastatus == 8){ $Qviewfee.= " and ft_cat BETWEEN 2 and 6 ";}else{
     if($laspdate < 1 ){ $Qviewfee.= " and ft_cat BETWEEN 1 and 2 ";}else{ $Qviewfee.= " and ft_cat = '".safee($condb,$catp)."' "; }}
 $Qviewfee.= " order by feetype DESC";
@@ -136,9 +156,9 @@ $viewfee_query = mysqli_query($condb,$Qviewfee)or die(mysqli_error($condb));
 $ccomp = mysqli_num_rows($viewfee_query);
 //if($states == $student_s){
 //$stud_from = "1" ;
-//$viewfee_query = mysqli_query($condb,"select * from fee_db where  Cat_fee = '1' and level = '".safee($condb,$student_level)."' and program = '".safee($condb,$student_prog)."' and ft_cat BETWEEN 1 and 2  order by feetype DESC ")or die(mysqli_error($condb));
+//$viewfee_query = mysqli_query($condb,"select * from fee_db where  Cat_fee = '1' and level = '".safee($condb,$sleven)."' and program = '".safee($condb,$student_prog)."' and ft_cat BETWEEN 1 and 2  order by feetype DESC ")or die(mysqli_error($condb));
 //}else{
-//$viewfee_query = mysqli_query($condb,"select * from fee_db where  program ='".safee($condb,$student_prog)."' and Cat_fee = '0' and level = '".safee($condb,$student_level)."' and ft_cat BETWEEN 1 and 2  order by feetype DESC ")or die(mysqli_error($condb));
+//$viewfee_query = mysqli_query($condb,"select * from fee_db where  program ='".safee($condb,$student_prog)."' and Cat_fee = '0' and level = '".safee($condb,$sleven)."' and ft_cat BETWEEN 1 and 2  order by feetype DESC ")or die(mysqli_error($condb));
 //$stud_from = "0" ;} 
 ?>
  <tr>
@@ -148,9 +168,9 @@ echo "<td colspan='9' style='text-align:centre;'><strong>No School Payment (s) F
 <?php
 $serial=1;
 $sumcredit=0; $i = 0; $pmt = 0.00; $t_namount = 0.00;
-while($row_utme = mysqli_fetch_array($viewfee_query)){ $enablestatus = $row_utme['status'];
+while($row_utme = mysqli_fetch_array($viewfee_query)){  $enablestatus = $row_utme['status'];
     if ($i%2) {$class = 'row2';} else {$class = 'row1';}$i += 1;
-$Fee_type1 = $row_utme['feetype'];  $Fee_cat = $row_utme['ft_cat']; if(($Fee_cat == "1" OR $Fee_cat == "6" OR $Fee_cat == "8") AND $enablestatus > 0 ){ $check_c =" Checked";  }else{ $check_c ="";  }
+ $Fee_type1 = $row_utme['feetype'];  $Fee_cat = $row_utme['ft_cat']; if(($Fee_cat == "1" OR $Fee_cat == "6" OR $Fee_cat == "8") AND $enablestatus > 0 ){ $check_c =" Checked";  }else{ $check_c ="";  }
 $paysid = $row_utme['fee_id']; $dperc = $row_utme['pper']; 
 $psdate = $row_utme['psdate']; $famount =$row_utme['f_amount'];
 $setend2 = $row_utme['edate'];$edate20 = str_replace('/', '-', $setend2 );
@@ -160,14 +180,17 @@ $nedate = date("d-m-Y", strtotime($edate20)); $timestamp2 = strtotime($nedate);
 $date_now2 = new DateTime(); $enddate    = new DateTime($nedate);
 if($dperc > 0 and $date_now2 < $enddate){ $noteo = ", Note:  (".$dperc."% penalty inclusive ) ".number_format($famount,2) ." + ". number_format($difp,2) ." = ".number_format($penaltysum,2); $namount = $penaltysum; }else{ $noteo = ""; $namount = $row_utme['f_amount'];  } 
 
-//$viewreg_query = mysqli_query($condb,"select pay_status,fee_type from payment_tb WHERE stud_reg = '".safee($condb,$student_RegNo)."'  AND fee_type = '".safee($condb,$Fee_type1)."' AND session = '".safee($condb,$default_session)."' AND level = '".safee($condb,$student_level)."'")or die(mysqli_error($condb));  $row_payview = mysqli_fetch_array($viewreg_query);
+//$viewreg_query = mysqli_query($condb,"select pay_status,fee_type from payment_tb WHERE stud_reg = '".safee($condb,$student_RegNo)."'  AND fee_type = '".safee($condb,$Fee_type1)."' AND session = '".safee($condb,$s_sec)."' AND level = '".safee($condb,$sleven)."'")or die(mysqli_error($condb));  $row_payview = mysqli_fetch_array($viewreg_query);
 //$statuspay2 = $row_payview['pay_status'];  $feetypepay = $row_payview['fee_type'];
-$qpaycomp = mysqli_query($condb,"SELECT pstatus FROM feecomp_tb  WHERE regno = '".safee($condb,$student_RegNo)."'  AND session = '".safee($condb,$default_session)."' AND level = '".safee($condb,$student_level)."' AND feetype = '".safee($condb,$Fee_type1)."'");
-$row_paycomp = mysqli_fetch_array($qpaycomp);  $statuspay = $row_paycomp['pstatus']; //Batchno ='".safee($condb,$feetp)."' AND  
-$payamt = getpayamt($student_RegNo,$Fee_cat,$student_prog,$student_level,$default_session,$Fee_type1);
-$dpay = getDueamt($Fee_cat,$student_prog,$student_level,$stud_from,$Fee_type1);
-if($statuspay > 0 AND $payamt >= $dpay){$t_namount = $namount; $dip = "display:none"; }else{ $t_namount = $namount - $payamt; $dip = ""; }
-?>     <tr class="<?php echo $class ; ?>" style="<?php echo $dip; ?>">
+
+$qpaycomp = mysqli_query($condb," SELECT fc.pstatus,fc.f_amount FROM fee_db fd RIGHT JOIN feecomp_tb fc ON fc.feetype = fd.feetype  WHERE fc.regno = '".safee($condb,$student_RegNo)."'  AND fc.session = '".safee($condb,$s_sec)."' AND fc.level = '".safee($condb,$sleven)."' AND fc.feetype = '".safee($condb,$Fee_type1)."' AND fd.program='".safee(Database::$conn,$student_prog)."' AND fc.pstatus = '0' GROUP BY fc.feetype");
+$row_paycomp = mysqli_fetch_array($qpaycomp);   //Batchno ='".safee($condb,$feetp)."' AND  
+ $payamt = getpayamt($student_RegNo,$Fee_cat,$student_prog,$sleven,$s_sec,$Fee_type1);// echo "/ ";
+ $dpay = getDueamt($Fee_cat,$student_prog,$sleven,$stud_from,$Fee_type1,0,$s_sec);
+ //$statuspay = $row_paycomp['pstatus'];
+if($payamt > $dpay){$t_namount = $namount; $dip = "display:none";$statuspay = "1"; $check_c1 =""; }else{ $t_namount = $namount - $payamt; $dip = "";$statuspay ="0"; $check_c1 =" Checked"; }
+?>    
+ <tr class="<?php echo $class ; ?>" style="display:none;<?php //echo $dip; ?>">
                         	<?php if($statuspay > 0){
 							$status = 'Paid';
 							 ?>
@@ -179,7 +202,9 @@ $status ="Not Paid"; //'<a rel="tooltip"  title="Click to Conutinue Payment" id=
 }  ?>
 														<td  style="text-align:center;">
            	<input id="optionsCheckbox"  class="uniform_on1" name="selector[]" type="checkbox" payamt="<?php echo $t_namount; ?>"   value="<?php echo $row_utme['fee_id']; ?>" <?php echo $check_c ;?> >    
+												
 													</td>
+													
                                                     <input type='hidden' name='feetn[]' value='<?php echo $Fee_cat; ?>' />
 													<?php } ?>
 														<td   style="text-align:center;">
@@ -196,14 +221,44 @@ $status ="Not Paid"; //'<a rel="tooltip"  title="Click to Conutinue Payment" id=
 							<td style="text-align:center;"><?php echo $status; ?></td> 		
 					 </tr>
                     <?php  $sumcredit += $t_namount;  $pmt += $payamt;} 
-                    if($pmt > $sumcredit){ $bal = "0.00";}else{ $bal = $sumcredit - $pmt; } 
+                    
+                    if($pmt >= $sumcredit){ $bal = "0.00";}else{ $bal = $sumcredit - $pmt; } 
                     $inst2 = getinstalment($sumcredit,$enableinst,$sumcredit); ?>
-                   <!--	<strike>N</strike>	--!>			
-			<?php if($bal > 0){ ?>				
+                   <!--	<strike>N</strike>	--!>
+                   
+                   <tr class="<?php echo $class ; ?>" style="<?php //echo $dip; ?>">
+                        	<?php if($statuspay > 0){$status = 'Paid';?>
+                            
+							<td  style="text-align:center;"  ></td> <?php }else{ if($Fee_cat =="1"){$status = 'Not Paid';}else{
+$status ="Not Paid"; }  ?><td  style="text-align:center;"></td>
+<?php } ?>
+<td   style="text-align:center;"> 1</td>
+						  <td><?php 
+					if($statuspay > 0){
+						echo "<font color='green'>".getfeecat($Fee_cat)." ".$noteo." </font>   ";
+						}else{echo "<font color='red'>".getfeecat($Fee_cat)." ".$noteo."</font> ";}
+					 ?></td>
+					 <td><?php echo getprog($student_prog); ?></td>
+                          <td align='center'><?php echo getlevel($sleven,$student_prog); ?></td>
+                         <td style="text-align:center;"><span id="tot1"> <?php echo number_format($sumcredit,2);?></span></td>	
+							<td style="text-align:center;"><?php echo $status; ?></td> 		
+					 </tr>
+                   
+			<?php  
+			if($bal > 0){ ?>				
     <tr class="row2">
     <input type="hidden" name="tp" value="<?php echo $sumcredit;?> " />
    <input type="hidden" name="tcp" value="<?php echo $nocomp; //echo  $ccomp;?> " />
-    <td colspan="4" style="text-align:center;color: red;"> <?php if($enableinst > 1){ if($pmt > $inst2){}else{ if($Fee_cat !== "8"){?>Please Note that the Minimum Payment installment is <b><?php echo "&#8358; ".number_format($inst2,2)."</b> for $enableinst installments";}}} ?>
+   <input type="hidden" name="lev" value="<?php echo $sleven;?> " />
+   <input type="hidden" name="sec" value="<?php echo $s_sec; //echo  $ccomp;?> " />
+    <td colspan="4" style="text-align:center;color: red;"> <?php if($enableinst > 1){ if($pmt > $inst2){}else{ if($Fee_cat !== "8"){?>
+    <!-- Please Note that the Minimum Payment installment is --!>
+    <div id="pmsg">    You Have Selected Part Payment Plan </div>
+    <span id="tot3"> 
+      <?php //if($sumcredit > 0){ echo "&#8358; ".number_format($sumcredit,2);}else{echo "0.00";} ?></span> 
+      <?php //echo "&#8358; ".number_format($inst2,2) ?><?php //echo "</b> for $enableinst installments";
+      }}} ?>
+    
     </td><td colspan="1"><strong>Total Scheduled Payment </strong></td><td style="text-align:center;color:red;"><strong><span id="tots"> 
       <?php if($sumcredit > 0){ echo "&#8358; ".number_format($sumcredit,2);}else{echo "0.00";} ?></span></strong></td><td></td></tr>
       <tr class="row2">
@@ -212,7 +267,7 @@ $status ="Not Paid"; //'<a rel="tooltip"  title="Click to Conutinue Payment" id=
       <tr class="row2">
     <td colspan="4"></td><td colspan="1"><strong>Total Balance </strong></td><td style="text-align:center;"><strong> 
       <?php if($bal > 0){ echo "&#8358; ".number_format($bal,2);}else{echo "0.00";} ?></strong></td><td></td></tr> <?php }else{ if(empty($sumcredit)){ }else{ ?>
-<tr><td colspan='9' style='text-align:centre;color:green;text-decoration: none;'><strong> ! You have Completed all your payment requirment for the <?php echo $default_session;?> session click <a href="#" onclick="window.location.href='Spay_manage.php';"> view payments </a> for details .</strong></td></tr>	
+<tr><td colspan='9' style='text-align:centre;color:green;text-decoration: none;'><strong> ! You have Completed all your payment requirment for the <?php echo $s_sec;?> session click <a href="#" onclick="window.location.href='Spay_manage.php';"> view payments </a> for details .</strong></td></tr>	
 <?php } }?>
 </tbody>
 <div class="btn-group" id="ccc2" name="divButtons">

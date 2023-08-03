@@ -85,6 +85,7 @@ $('#myModalat2').modal({
          
 </script>
                   <?php } ?>
+ 
 <?php
 $sql_gset = mysqli_query($condb,"select * from grade_tb where prog ='".safee($condb,$student_prog)."' and grade_group ='01' Order by b_max ASC limit 1 ")or die(mysqli_error($condb)); $getmg = mysqli_fetch_array($sql_gset);  $getpass2 = $getmg['b_max']; 
 $year=date('Y');  
@@ -97,7 +98,7 @@ $year=date('Y');
 	if(empty($student_RegNo)){ $que_checkpay=mysqli_query($condb,"select SUM(paid_amount) as samount from payment_tb where app_no = '".safee($condb,$student_appNo)."' and session ='".safee($condb,$default_session)."' and pay_status='1' and ft_cat='1' and level = '".safee($condb,$student_level)."' ");}else{
 $que_checkpay=mysqli_query($condb,"select SUM(paid_amount) as samount from payment_tb where stud_reg ='".safee($condb,$student_RegNo)."' and session ='".safee($condb,$default_session)."' and pay_status='1' and ft_cat='1' and level = '".safee($condb,$student_level)."'  ");}
 	$warning_count2=mysqli_num_rows($que_checkpay);	      
-	$warning_data=mysqli_fetch_array($que_checkpay);   $sumpay = $warning_data['samount'];
+	$warning_data=mysqli_fetch_array($que_checkpay);   $sumpay = ($warning_data['samount']); 
 	//$pay_status = $warning_data['pay_status'];
 //$newSession   =	substr($warning_data['session'],5,10);
 //$que_warning2=mysqli_query($condb,"select * from payment_tb where reg_id='$regNo' and session ='$default_session'");
@@ -283,8 +284,8 @@ if($sumpay >= $com_amount and $sumpay > 0 and $nocomp >= $nocompm){ ?>
 			<div class="icon"><i class="fa fa-money"></i>
                           </div>
                           <div class="count"><strong> &#8358; <?php $fin = 0.00;	if(empty($amtpaid)){ echo number_format($com_payamt,2) + $penaltyamt; }else{ $fin = ($getDuepay + $penaltyamt) - $amtpaid; echo number_format($fin,2);}   ?></div>
-						  <h3><?php if(empty($penaltyamt)){ ?>School Fee For The Session<?php }else{echo " Late Payment Panalty Added"; } ?></h3>
-						  <a href="Spay_manage.php?view=a_p">							  
+						  <h3><?php if(($penaltyamt) < 1){ ?>School Fee For The Session<?php }else{echo " Late Payment Panalty Added"; } ?></h3>
+						  <a href="<?php echo $ur; ?>">							  
                                 <div class="modal-footer">
                                     <span class="pull-left">Make Payment</span>
                                     <span class="pull-right"><i class="fa fa-arrow-right"></i></span>

@@ -62,6 +62,9 @@ switch ($action) {
         case 'status15' :
 	enableappedit();
 		break;
+        case 'status16' :
+	verifyExempt();
+		break;
 	default :
 	 redirect("../admin/");
 		//redi('Location: index.php');
@@ -238,4 +241,14 @@ $sql   = mysqli_query(Database ::$conn,"UPDATE new_apply1 SET reg_status = '".sa
 //redirect("new_apply.php?details&userId=".$userId);
 if(empty($dep1)){redirect("new_apply.php");}else{ redirect("new_apply.php?dept1_find=".$dep1."&session2=".$sec1."&c_choice=".$los);}
 }
+
+function verifyExempt(){
+$userId = $_GET['userId'];	$admin_username = getstaff($_GET['stf'],1);
+$nst 	= $_GET['nst']; $matno 	= $_GET['matno']; $staff = getstaff($_GET['stf']); 
+$status = $nst == 'Approve' ? '1' : '0';
+ $sql   = mysqli_query(Database ::$conn,"UPDATE fee_exeption_tb SET status = '".safee(Database::$conn,$status)."',approved = '".safee(Database::$conn,$_GET['stf'])."' WHERE eid ='".safee(Database::$conn,$userId)."'");
+mysqli_query(Database ::$conn,"insert into activity_log (date,username,action) values(NOW(),'".$admin_username."','Fee Component Exemption was Approved for $matno by $staff')")or die(mysqli_error(Database::$conn)); 
+redirect("formSales.php?view=exepay");
+	}
+    
 ?>

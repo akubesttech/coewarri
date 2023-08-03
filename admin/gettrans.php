@@ -1,7 +1,7 @@
 <?php
 include('lib/dbcon.php'); 
 dbcon();
-// get student transcript search details
+// get student transcript search detail
 if(isset($_REQUEST['matno'])){
  $tmatno = $_POST['matno'];
     $sql = "SELECT * FROM student_tb WHERE RegNo='".safee($condb,$tmatno)."'";
@@ -103,4 +103,20 @@ if(isset($_REQUEST['matno'])){
     echo json_encode($users_arr2);
     exit;
     }
+    
+    // matno exemption for fees
+    if(isset($_REQUEST['matnoex'])){
+ $tmatnox = $_POST['matnoex'];
+    $sql = "SELECT * FROM student_tb WHERE RegNo = '".safee($condb,$tmatnox)."' OR e_address = '".safee($condb,$tmatnox)."'";
+    $result = mysqli_query($condb,$sql); 
+    $users_arr2 = array();
+    while( $row = mysqli_fetch_array($result) ){
+        $id = $row['RegNo']; $actid = $row['RegNo']; $level = getlevel($row['p_level'],$row['app_type']);
+        $fullname = ucwords($row['FirstName']." ".$row['SecondName']." ".$row['Othername'])." (".$level.")";
+       $users_arr2[] = array("Regm" => $id,"Reg2" => $actid,"fullname" =>$fullname);
+    }
+// encoding array to json format
+    echo json_encode($users_arr2);
+    exit;
+    } 
 ?>

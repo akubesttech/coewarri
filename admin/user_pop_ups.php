@@ -150,7 +150,7 @@ function sendValue(value)
                         
                           
                           	<td width="120">
-												<a rel="tooltip"  title="add selected user" id="choose_patient" href="add_Users.php<?php echo '?d_id='.md5($id); ?>"  data-toggle="modal" class="btn btn-success" ><i class="fa fa-plus icon-large">Add Staff</i></a>
+												<a rel="tooltip"  title="add selected user" id="choose_patient" href="add_Users.php<?php echo '?view=addUser&d_id='.md5($id); ?>"  data-toggle="modal" class="btn btn-success" ><i class="fa fa-plus icon-large">Add Staff</i></a>
 												</td>
 												<script type="text/javascript">
 									 $(document).ready(function(){
@@ -314,4 +314,5 @@ function sendValue(value)
                     </div>
                   </div>
                   <!-- /modals -->
-
+                  
+                  

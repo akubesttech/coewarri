@@ -12,14 +12,14 @@
 						 $enableinst = setinstallment;  $sshow = $row['istatus'];  $semailo = $row['e_address'];
 							  if($student_state == "Delta"){ $scan = "1";}else{ $scan = "0";}
                               if($acastatus == 8){ $ftcat = "6";}else{$ftcat = "1";}$ft = "8";
-$getDuepay = getDueamt($ftcat,$student_prog,$student_level,$scan);
+$getDuepay = getDueamt($ftcat,$student_prog,$student_level,$scan,0,$default_session);
 $amtpaid = getpayamt($student_RegNo,$ftcat,$student_prog,$student_level,$default_session); 
  if(empty($amtpaid)){ $tn = "8";  }else{ $tn = "1"; }
 $laspdate = getlpdate($student_RegNo,$ft,$student_prog,$student_level,$default_session,$scan);
 $sumpay1 = getpayamt($student_RegNo,$ft,$student_prog,$student_level,$default_session); //$warning_data['samount']; 
-$duep1 = getDueamt($ft,$student_prog,$student_level,$scan);
+$duep1 = getDueamt($ft,$student_prog,$student_level,$scan,0,$default_session);
 if($laspdate < 1 ){ $catp = "1";}else{ if($sumpay1 >= $duep1){ $catp = "1"; }else{  $catp = $tn; } }                           
- $qcompamt = "select * from fee_db where  level= '".safee($condb,$student_level)."' and program='".safee($condb,$student_prog)."'  and Cat_fee = '".safee($condb,$scan)."'  ";            
+ $qcompamt = "select * from fee_db where  level= '".safee($condb,$student_level)."' and session = '".safee($condb,$default_session)."' and program='".safee($condb,$student_prog)."'  and Cat_fee = '".safee($condb,$scan)."'  ";            
 if($acastatus == 8){ $qcompamt.= " and ft_cat ='6' ";}else{
      if($laspdate < 1 ){$qcompamt.= " and ft_cat ='1' "; $penaltyamt = 0.00;}else{ $qcompamt.= " and ft_cat ='".safee($condb,$catp)."' "; $penaltyamt = $duep1;}}
 if(($amtpaid < $getDuepay) AND ($enableinst > 1 ) AND ($acasemestertag == "First")){ $qcompamt.= " and status = '1' "; }
@@ -59,8 +59,14 @@ if($sumcredito > 0){   $com_amount = $sumcredito; }else{ $com_amount = 0; }
 $que_checkpay=mysqli_query($condb,"select SUM(paid_amount) as samount from payment_tb where stud_reg ='".safee($condb,$student_RegNo)."' and session ='".safee($condb,$default_session)."' and pay_status='1' and ft_cat='".safee($condb,$catp)."' and level = '".safee($condb,$student_level)."'  ");}
 	$warning_count2=mysqli_num_rows($que_checkpay);	      
 	$warning_data=mysqli_fetch_array($que_checkpay);   $sumpay = $warning_data['samount'];
-	
-		?>
+        $fr = substr($default_session,0,4) - 1;
+$bk = substr($default_session,5,10) - 1;
+ if(($difflevel > 100) && ($student_level > 100 ) ){$lev = $student_level - 100; $secback = $fr."/".$bk; }else{$lev = $student_level; $secback = $default_session; }
+
+$spayment = getpayamt($student_RegNo,$ft,$student_prog,$lev,$secback);
+$dueAmt = getDueamt($ft,$student_prog,$lev,$scan,0,$secback);
+if(($spayment >= $dueAmt) && ($spayment > "0.00") && ($difflevel > 100)){$ur = "Spay_manage.php?view=a_p"; }else{$ur = "Spay_manage.php?view=SelectPay";}
+	?>
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
@@ -111,7 +117,7 @@ $que_checkpay=mysqli_query($condb,"select SUM(paid_amount) as samount from payme
                   <li><a><i class="fa fa-book"></i>Course Management <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="course_manage.php?view=S_CO">Course Registration</a></li>
-                      <li><a href="course_manage.php?view=r_co">Registered Courses</a></li>
+                      <li><a href="course_manage.php?view=c_reg">Registered Courses</a></li>
                       <li><a href="course_manage.php?view=l_out">Oustanding Courses</a></li>
                   <!--    <li><a href="#">Courses Allocation</a></li> --!>
                 
@@ -129,7 +135,7 @@ $que_checkpay=mysqli_query($condb,"select SUM(paid_amount) as samount from payme
                   <li><a><i class="fa fa-book"></i>Course Management <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="course_manage.php?view=S_CO">Course Registration</a></li>
-                      <li><a href="course_manage.php?view=r_co">Registered Courses</a></li>
+                      <li><a href="course_manage.php?view=c_reg">Registered Courses</a></li>
                       <li><a href="course_manage.php?view=l_out">Oustanding Courses</a></li>
                   <!--    <li><a href="#">Courses Allocation</a></li> --!>
                 
@@ -140,8 +146,8 @@ $que_checkpay=mysqli_query($condb,"select SUM(paid_amount) as samount from payme
                   <li><a><i class="fa fa-money"></i>School Fee Payment <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="Spay_manage.php">View Payments</a></li>
-                      <li><a href="Spay_manage.php?view=a_p">Make Payments</a></li>
-                    <!--  <li><a href="#">Print Payments</a></li> --!>
+                      <li><a href="<?php echo $ur; ?>">Make Payments</a></li>
+                        <!--  <li><a href="#">Print Payments</a></li> --!>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-building"></i>Hostel Record<span class="fa fa-chevron-down"></span></a>
@@ -220,5 +226,5 @@ $que_checkpay=mysqli_query($condb,"select SUM(paid_amount) as samount from payme
             <!-- /menu footer buttons -->
           </div>
         </div>
-           <?php 
+      
        

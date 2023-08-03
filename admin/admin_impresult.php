@@ -12,6 +12,7 @@ message("You don't have the permission to access this page", "error");
 }
   ?>
 
+
 <script language="javascript" type="text/javascript">
 function checkUpload()
 {
@@ -35,7 +36,6 @@ function checkUpload()
 
 
 </script>
-
 <div class="x_panel">
                 
              
@@ -84,17 +84,12 @@ while($rsblocks = mysqli_fetch_array($resultblocks))
                           </select>
                       </div>
                       
-   
-					   
-                   
-                       <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
-                       
-						  	  <label for="heard">Academic Session</label>
+<div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
+                       <label for="heard">Academic Session</label>
                             <select name="session" id="session"  required="required" class="form-control">
-  <option value="">Select Session</option>
-<?php echo fill_sec(); ?>
-</select>
-                      </div>
+  <option value="">Select Session</option><?php echo fill_sec(); ?>
+</select></div>
+                      
                       <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
 						  	  <label for="heard">Semester</label>
                             	  	 <select class="form-control" name="semester" id="semester"  required="required">
@@ -156,7 +151,7 @@ while($restallot = mysqli_fetch_array($qeryalot))
                       <div  class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback>
                         <div class="col-md-6 col-md-offset-3">  <?php   if (authorize($_SESSION["access3"]["rMan"]["rup"]["edit"])){ ?> 
                          <button type="submit" name="addStaff"  id="save" data-placement="right" class="btn btn-primary col-md-4" title="Click To Import Student Details for Result Processing" ><i class="fa fa-download"></i> Import Result</button>
-                        
+                        <button  name="ubatch"  id="ubatch" type='button' onClick="window.location.href='Result_am.php?view=bupload';" class="btn btn-primary " title="Click to Upload Result in Batches" ><i class="fa fa-download"></i> Batch Upload </button>
                         <script type="text/javascript">
 	                                            $(document).ready(function(){
 	                                            $('#save').tooltip('show');

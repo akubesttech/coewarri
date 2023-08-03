@@ -9,11 +9,11 @@
 		if(isset($_POST['queryString'])) {
 			$queryString = safee($condb,$_POST['queryString']);
 			
-			if(strlen($queryString) >0) {
+			if(strlen($queryString) >0) { 
 
 			//	$query = $db->query("SELECT id, fname, lname FROM customer WHERE fname LIKE '$queryString%' OR lname LIKE '$queryString%' LIMIT 10");
 			
-$result = mysqli_query($condb,"SELECT ftrans_id, pin, serial, fsname, foname FROM fshop_tb WHERE ftrans_id = '$queryString' and fpay_status = '1' LIMIT 10");
+$result = mysqli_query($condb,"SELECT ftrans_id, pin, serial, fsname, foname FROM fshop_tb WHERE ftrans_id = '".trim($queryString)."' and fpay_status = '1' LIMIT 10");
 				if($result) {
 				echo '<ul>';
 					//while ($result2 = mysql_fetch_object() $query ->fetch_object()) {

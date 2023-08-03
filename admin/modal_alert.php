@@ -213,11 +213,91 @@
                   </div>
                   
                   
+                  
                   <div id="timeout2" class="modal fade" >
     <h1>Session About To Timeout</h1>
     <p>You will be automatically logged out in 1 minute.<br />
     To remain logged in move your mouse over this window.
 </div>
+<div class="modal fade" id="postProM"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span>
+                          </button>
+                          <h4 class="modal-title course_add_title" id="course_add_title">Select Courses To Register</h4>
+                          </div>
+            <form id="loadcourse" class="loadcourse" >
+              <input type="hidden" placeholder="" class="form-control "  name="txtpro_id" id="txtpro_id" />
+                
+                <div class="modal-body" id="lcourse">
+              <table class="table table-striped table-bordered" id="feat_tb"  border="0" style="margin:0px; font-size:12px;overflow-x:auto;color: gray;font-family:Arial;"     >
+            <thead>
+                        <tr>
+                         <th><input type="checkbox" name="chkall" id="chkall" onclick="return checkall('selector[]');"></th>
+                          <th>Course Code</th>
+                          <th>Course Title</th>
+                          <th>Credit Unit</th> 
+                            <th>Course Status</th>
+                          <th>Registration Status</th>
+                         <th>Action</th>
+                        </tr>
+                      </thead>
+                       <tbody id="lfeat_tb">
+                              </tbody>
+                                </table>
+                                
+                                </div>
+                   
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    <button  type="submit" id="btn_savef" class="btn btn-primary" style="display: none;">Submit Data</button>
+                    <div class="response-message ms-3"></div></div>
+            </form> </div>
+        </div>
+    </div>
+<!-- add more courses modal box --!>
+<div class="modal fade" id="Maddcourse"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span>
+                          </button>
+                          <h4 class="modal-title course_add_title2" id="course_add_title2">Select Courses To Register</h4>
+                          </div>
+            <form id="courseall" class="courseall" >
+              <input type="hidden" placeholder="" class="form-control "  name="txtpro_id" id="txtpro_id" />
+                
+                <div class="modal-body lcourse3" id="lcourse3" style="max-height: 450px;overflow-y: scroll;">
+              <table class="tableb table-striped2 table-bordered2" id="feat_tbn"  border="0" style="margin:0px; font-size:12px;color: gray;font-family:Arial; ;"     >
+              <div >
+			<input class="form-control" style="min-width: 250px;max-width: 250px;" type="text" id="search" placeholder="Search By Course Code"  onkeyup="fillmorecourses(this.value)" /><br>
+		</div>
+        <div class="clear-float"></div>
+            <thead>
+                        <tr>
+                         <th><input type="checkbox" name="chkall" id="chkall" onclick="return checkall('selector[]');"></th>
+                          <th>Course Code</th>
+                          <th>Course Title</th>
+                          <th>Credit Unit</th> 
+                            <th>Course Status</th>
+                          <th>Registration Status</th>
+                         <th>Action</th>
+                        </tr>
+                      </thead>
+                       <tbody >
+                              </tbody>
+                                </table>
+                                
+                                </div>
+                   
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    <button  type="submit" id="btn_savef" class="btn btn-primary" style="display: none;">Submit Data</button>
+                    <div class="response-message ms-3"></div></div>
+            </form> </div>
+        </div>
+    </div>
                   <script>
 dragElement(document.getElementById("myModalat"));
 dragElement(document.getElementById("myModalat2"));
@@ -226,6 +306,7 @@ dragElement(document.getElementById("myModalat4"));
 dragElement(document.getElementById("myModalat5"));
 dragElement(document.getElementById("myModalat6"));
 dragElement(document.getElementById("myModalat7"));
+
 
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;

@@ -30,6 +30,56 @@
       </div>
     </div>
  <script>
+ function calc() {
+  var tots = 0;
+  $(".uniform_on1:checked").each(function() {
+    var price = $(this).attr("payamt");
+    tots += parseFloat(price);
+  });
+  $('#tot1').text(tots.toFixed(2));
+  $('#tots').text(tots.toFixed(2));
+}
+$(function() {
+  $(document).on("change", ".uniform_on1", calc);
+  calc();
+});
+function fullpay(){  
+                var ele=document.getElementsByName('selector[]');
+                var paypanel = document.getElementById("paymain"); 
+                   var fbtn = document.getElementById("fbtn");
+                   var pbtn = document.getElementById("pbtn");
+                     var phd = document.getElementById("pheader");  
+                for(var i=0; i<ele.length; i++){  
+                    if(ele[i].type=='checkbox')  
+                        ele[i].checked=true;
+                         calc();
+                         paypanel.style.display = "block";
+                         fbtn.style.backgroundColor = "#3CB043";
+                          phd.style.backgroundColor = "#3CB043";
+                          pbtn.style.backgroundColor = "#ffffff";
+                          document.getElementById('pmsg').innerHTML = "You Have Selected Full Payment Plan"; 
+                           document.getElementById('hmsg').innerHTML = "You Have Selected to make Full Payment!"; 
+                          $("#tot1").load(window.location.href + " #tot1" );
+                          $("#tots").load(window.location.href + " #tots" );
+                }  
+            }  
+            function partpay(){
+           var ele=document.getElementsByName('selector[]'); 
+                var paypanel = document.getElementById("paymain");
+                 var pbtn = document.getElementById("pbtn"); 
+                for(var i=0; i<ele.length; i++){  
+                    if(ele[i].type=='checkbox')  
+                        ele[i].checked=false;  
+                       calc();
+                        paypanel.style.display = "block";
+                         pbtn.style.backgroundColor = "#3CB043";
+                          //$("#payml").load(window.location.href + " #payml" );
+                       } 
+                      location.reload(); 
+                  document.getElementById('pmsg').innerHTML = "You Have Selected Part Payment Plan";
+                   document.getElementById('hmsg').innerHTML = "You Have Selected to make Part Payment!"; 
+            }             
+
 
  $(document).on('click', '.platform', function(e){
 		e.preventDefault();
@@ -436,18 +486,9 @@ window.setTimeout(function() {
 }, 5000);
  
 });
-  function calc() {
-  var tots = 0;
-  $(".uniform_on1:checked").each(function() {
-    var price = $(this).attr("payamt");
-    tots += parseFloat(price);
-  });
-  $('#tots').text(tots.toFixed(2));
-}
-$(function() {
-  $(document).on("change", ".uniform_on1", calc);
-  calc();
-});
+
+ 
+
  /*   $(document).ready(function(){
                 $( "#ed , #endDate" ).datepicker({
                     dateFormat: 'yy-mm-dd',
@@ -457,7 +498,201 @@ $(function() {
                 });
             }); */
 
+// Load Courses on Dropdown for registration
+$('body').on('click', '.addcourse', function () {
+           $('#postProM').modal('show');
+           var sdept = $(this).attr('data-did');
+            var slev = $(this).attr('data-lid');
+            var slevm = $(this).attr('data-lev');
+            var ssem = $(this).attr('data-sid');
+            var regno = $(this).attr('data-reg');
+            var sec = $(this).attr('data-sec');
+            var title = "Select Courses To Register For : : " + ssem + " Semester";;
+            var maino = ssem + " Semester";
+           $("#course_add_title").html(title);
+            $("#mainq").html(maino);
+            
+           $.ajax({
+                type  : 'post',
+                url   : '<?php echo "../admin/getcand.php"?>',
+                data: {dept:sdept,slev:slev,ssem:ssem,reg:regno,sec:sec,request:3},
+                async : true,
+                dataType : 'json',
+                success : function(response){
+                     
+                  var html = '';
+                    var i;
+                    var tab_feat = [];
+                    $('#feat_tb tbody').empty();
+                    var len = response.length;
+                   if(len > 0){
+                    for(i=0; i<response.length; i++){
+                           var tstatus = response[i].ccat ;
+                           var tst = (tstatus=='0')? 'Add' : 'Remove';
+                         var tsc = (tstatus=='0')? 'btn btn-danger' : 'btn btn-info';
+                         //var courseid = response[i].C_id ;
+                         <?php $cid = ""; ?>
+                         var courseid = response[i].C_id ;
+                        <?php ""; ?>
+                         	<?php
+				$in_session = "0";
+				if(!empty($_SESSION["cart_item"])) {
+					$session_code_array = array_keys($_SESSION["cart_item"]);
+				    if(in_array($cid,$session_code_array)) {
+						$in_session = "1";
+				    }
+				}
+			?>
+                  html += '<tr>'+
+                            '<td>'+ (i + 1) +'</td>'+
+                            '<td>'+response[i].ccode+'<input type="hidden" id="sem_'+courseid+'" name="sem" value="'+ ssem +'" size="10" /></td>'+
+                            '<td>'+response[i].ctitle+'</td>'+
+                            '<td>'+response[i].cunit+'</td>'+
+                            '<td>'+response[i].ccat+'</td>'+
+                            '<td>'+response[i].csta+'<input type="hidden" id="qty_'+courseid+'" name="prog" value="<?php echo $student_prog;?>" size="10" /></td>'+
+                            '<td style="text-align:right;">'+
+                            //'<a href="javascript:void(0);" class="btn btn-info  item_edit" data-fid="'+response[i].Cid+'" data-feature_name="'+response[i].ccat+'" >Edit</a>'+' '+
+                            //'<a href="javascript:void(0);" class="' + tsc + '  tenVeri " data-fid="'+response[i].Cid+'"  " >'+ tst +'</a>'+' '+
+                            '<input type="button" id="add_'+courseid+'" value="Add Course" class="btn btn-primary cart-action" '+ response[i].rst +' onClick = "cartAction(\'add\','+response[i].C_id+','+ regno +','+sec+','+sdept+','+slevm+')"  <?php if($in_session != "0") { ?>style="display:none" <?php } ?>  />'+
+			                '<input type="button" id="added_'+courseid+'" value="Added" class="btn btn-info btnAdded" <?php if($in_session != "1") { ?>style="display:none" <?php } ?>  />'+
+                            '</td>'+
+                            '</tr>';
+                            //alert(response[i].ccode);
+                    }
+                    }else{
+                           html += '<tr >'+
+                            '<td colspan="7"> No Course Record Found For '+ssem+' Semester </td>'+
+                            '</tr>';
+                      
+                    }
+                    //$('#feat_tb tbody').html(html);
 
+                    $('#feat_tb tbody').prepend(html);
+                  
+                    $('#feat_tb').dataTable({
+                           //destroy:true,
+                       retrieve: true,
+                        data: tab_feat[html],
+                        
+                        //dom:'Bfrtip',
+                   });
+                  
+               }
+            });
+
+        });
+        
+        function cartAction(action,course_id,Regno,sec,dep,lev) {
+           var html = '';
+	var queryString = "";
+   if(action != "") {
+		switch(action) {
+			case "add":
+				queryString = 'action='+action+'&code='+ course_id+'&regno='+ Regno +'&secm='+ sec +'&dep='+ dep +'&lev='+ lev 
+                +'&prog='+$("#qty_"+course_id).val()+'&sem='+$("#sem_"+course_id).val();
+			break;
+			case "remove":
+				queryString = 'action='+action+'&code='+ course_id+'&regno='+ Regno +'&secm='+ sec +'&dep='+ dep +'&lev='+ lev ;
+			break;
+			case "empty":
+				queryString = 'action='+action;
+			break;
+		}	 
+	}
+	jQuery.ajax({
+	url: "<?php echo "../admin/CourseTempAdd.php"?>",
+	data:queryString,
+	type: "POST",
+	success:function(data){
+	    
+		$("#cart-item").html(data);
+		if(action != "") {
+			switch(action) {
+				case "add":
+                //$("#lcourse").load(window.location + " #lcourse");
+					$("#add_"+course_id).hide();
+					$("#added_"+course_id).show();
+				break;
+				case "remove":
+         
+				    $("#add_"+course_id).show();
+					$("#added_"+course_id).hide();
+                    $("#wrapm_"+course_id).remove();
+                    //$("tr.wrapn #rem_"+course_id).remove();
+				break;
+				case "empty":
+				
+                    $(".btnAddAction").show();
+					$(".btnAdded").hide();
+                    
+				break;
+			}	 
+		}else{
+		   html += '<table><tr  class="row1">'+
+                            '<td colspan="9"> !No Course Added Yet </td>'+
+                            '</tr></table>';
+                            $('#cart-item').prepend(html);
+		}
+	},
+	error:function (){}
+	}); 
+}
+// Load Courses on Dropdown for registration2
+$('body').on('click', '.addmore', function () {
+           $('#Maddcourse').modal('show');
+           $("#courseall")[0].reset();
+           var sdept = $(this).attr('data-did');
+            var slev = $(this).attr('data-lid');
+            var slevm = $(this).attr('data-lev');
+            var ssem = $(this).attr('data-sid');
+            var regno = $(this).attr('data-reg');
+            var sec = $(this).attr('data-sec');
+            //$('#Maddcourse #search').val("");
+            	$('.tableb tbody').empty();
+            var title = "Select Courses To Register For : : " + ssem + " Semester";;
+            var maino = ssem + " Semester";
+           $("#course_add_title2").html(title);
+            $("#mainq").html(maino);
+            // $("#lcourse3").load(window.location + " #lcourse3");
+              });
+ function fillmorecourses(str){
+	var params = str;
+    var getSem = "<?php echo $geSem = $_REQUEST['semester']; ?>";
+    //console.log(params);
+	if(params=="") {
+		$('.tableb tbody').empty();
+		//console.log("emptied");
+		return;
+	}
+	var request = new XMLHttpRequest();
+	request.open("GET","getCourse.php?q="+params+"&sem="+getSem,true);
+	request.onreadystatechange = function(){
+		if(this.readyState==4 && this.status == 200){
+			if(this.responseText != null){
+				if(this.responseText=="No Data"){
+					$('#error').html(this.responseText);
+					$('.tableb tbody').empty();
+				}else{
+					$('#error').html("");
+					$('.tableb  tbody').empty();
+				    $('.tableb  tbody').append(this.responseText);
+                    
+                    	$('#tableb').DataTable({
+						destroy: true,
+						searching: false,
+                        ordering: false,
+						data: data
+					});
+				}
+			} //console.log("script didn't return a value");
+		}
+	}
+	request.send();
+}
+$(document).ready(function () {
+    
+	cartAction('','','','','','');
+})
 </script>
 <style>#time-hour{
 	list-style-type : none;

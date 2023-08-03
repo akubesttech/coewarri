@@ -9,7 +9,7 @@ $dform_get2 = mysqli_fetch_assoc($sql_svery); $ftranid = $dform_get2['ftrans_id'
 $fullname = $sname." ".$oname; $feename = $dform_get2['feen'];
 $femail = $dform_get2['femail']; $fphone = $dform_get2['fphone']; $ftype = $dform_get2['ftype'];$fsession = $dform_get2['session'];
 $fcharge = $dform_get2['charge']; $famount  = $dform_get2['famount']; $dategen  = $dform_get2['dategen']; $tpayamt = $famount + $fcharge;
-$transdate1 = $dform_get2['fdate_paid'];
+$transdate1 = $dform_get2['fdate_paid']; $orderPin = $feeinfo['pin'];$orderSerial = $feeinfo['serial'];
 
 ?>
    <section id="content" role="document">
@@ -98,8 +98,12 @@ Please Check Your email (inbox or spam) for the Pin Details.<br>Alternatively yo
    <tr class="row1">
     <td width="20%" colspan="1" height="20"><strong> Programme:</strong></td>
     <td width="20%" colspan="4"><?php echo getprog($ftype); //$_SESSION['ftype2']." Form" ;?></td>
-     
    </tr>
+ <tr class='row2' style="display:none;"> 
+<td width='20%' colspan='2' height='20'><strong> Pin:</strong></td>
+  <td width='20%' colspan='4' height='20'> <?php echo $orderPin; ?></td>
+  </tr> <tr class='row1'style="display:none;"><td width='20%' colspan='2' height='20'><strong> Serial:</strong></td>
+<td width='20%' colspan='4' height='20'> <?php echo $orderSerial; ?></td> </tr>
 <tr class="row2">
     <td width="20%" colspan="1" height="20"><strong> Application Fee:</strong></td>
     <td width="20%" colspan="1">&#8358;<!--<strike>N</strike> --!><?php echo " ".number_format($famount,2); ?></td>
@@ -128,7 +132,7 @@ Please Check Your email (inbox or spam) for the Pin Details.<br>Alternatively yo
 		   <button name="Login_Reprint" class="btn btn-success" onclick="window.open('apply_b.php?view=New','_self')" data-placement="right" type="button" title="Click to apply now">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apply Now&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
 		   
 		   </div></td>
-            <td height="10" colspan="1"><div	id="ccc2">&nbsp;&nbsp;&nbsp;<button name="Login_Reprint" class="btn btn-primary" data-placement="right" type="submit" title="Click to Print" onClick="return Clickheretoprint();" >Print</button></div>
+            <td height="10" colspan="1"><div id="ccc2">&nbsp;&nbsp;&nbsp;<button name="Login_Reprint" class="btn btn-primary" data-placement="right" type="submit" title="Click to Print" onClick="return Clickheretoprint();" >Print</button></div>
 	
 			</td> 
           <td  height="10" colspan="3" id="ccc3">

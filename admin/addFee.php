@@ -22,7 +22,7 @@ else
 if(isset($_POST['addFee'])){
 $fee = $_POST['fee']; $f_pro = ($_POST['f_pro']); $Dept = isset($_POST['dept1']) ? $_POST['dept1'] : '';
 $Dfac = isset($_POST['fac1']) ? $_POST['fac1'] : ''; $otherl = ucfirst(isset($_POST['otherl']) ? $_POST['otherl'] : ''); 
-$amount = $_POST['amount'];$status = $_POST['status'];$flevel = $_POST['level'];
+$amount = $_POST['amount'];$status = $_POST['status'];$flevel = $_POST['level'];$secn = $_POST['sec']; $bkey = $_POST['bkey']; $nbkey = $_POST['bkey'].$fee;
 $Cat_fee = $_POST['cat_fee']; $Cpen = isset($_POST['chkPenalty']) ? $_POST['chkPenalty'] : '0'; //gnum($_POST['chkPenalty']); 
 if(empty($Cpen)){$Penper = 0; $pendate = $_POST['pdate']; $enddate = $_POST['pdate3'];}else{
 $Penper = $_POST['penper']; $pendate = $_POST['pdate']; $enddate = $_POST['pdate3'];
@@ -31,11 +31,13 @@ $edt = str_replace('/', '-', $enddate );  $edtt = date("Y-m-d", strtotime($edt))
 $end_ts = strtotime($edtt);
 $curdateset=date("Y-m-d");
 $currentdate_ts = strtotime($curdateset);
-$query_f = mysqli_query($condb,"select * from fee_db where level = '".safee($condb,$flevel)."' and program = '".safee($condb,$f_pro)."' and Cat_fee = '".safee($condb,$Cat_fee)."' and feetype = '".safee($condb,$fee)."'")or die(mysqli_error($condb));
-
-$row_fee = mysqli_num_rows($query_f);
+$qfeecom = "select * from fee_db where level = '".safee($condb,$flevel)."' and session ='".safee($condb,$secn)."' and program = '".safee($condb,$f_pro)."' and Cat_fee = '".safee($condb,$Cat_fee)."' and feetype = '".safee($condb,$fee)."' ";
+ if(strlen($bkey) > 0){ $qfeecom .= " and bcode ='".safee(Database::$conn,$bkey)."'";}
+ $qfeecom2 = mysqli_query(Database::$conn,$qfeecom)or die(mysqli_error($conn));
+//$query_f = mysqli_query($condb,"select * from fee_db where level = '".safee($condb,$flevel)."' and program = '".safee($condb,$f_pro)."' and Cat_fee = '".safee($condb,$Cat_fee)."' and feetype = '".safee($condb,$fee)."'")or die(mysqli_error($condb));
+$row_fee = mysqli_num_rows($qfeecom2);
 if ($row_fee>0){
-	message("ERROR:  The Fee Entered  Already Added For ". getprog($f_pro) ." in ".getlevel($flevel,$class_ID) ." Try Again", "error");
+	message("ERROR:  The Fee Entered  Already Added For ". getprog($f_pro) ." in ".getlevel($flevel,$class_ID) ." ".$secn." Session Try Again", "error");
 		        redirect('add_Fees.php');
 			}elseif(!ctype_digit($amount)){
 					message("ERROR: Incorrect Format For Amount  it should be a Digit", "error");
@@ -44,7 +46,8 @@ if ($row_fee>0){
 			message("End date should not be in the Past !", "error");
 		       redirect('add_Fees.php');
 			}else{
-mysqli_query($condb,"insert into fee_db (feetype,ft_cat,program,level,f_dept,f_fac,f_amount,status,Cat_fee,penalty,pper,psdate,edate) values('".safee($condb,$fee)."','".getftcat($fee)."','".safee($condb,$f_pro)."','".safee($condb,$flevel)."','$Dept','$Dfac','".safee($condb,$amount)."','".safee($condb,$status)."','".safee($condb,$Cat_fee)."','".safee($condb,$Cpen)."','".safee($condb,$Penper)."','".safee($condb,$pendate)."','".safee($condb,$enddate)."')")or die(mysqli_error($condb));
+mysqli_query($condb,"insert into fee_db (feetype,ft_cat,program,level,session,f_dept,f_fac,f_amount,status,Cat_fee,penalty,pper,psdate,edate,bcode,nbcode) values('".safee($condb,$fee)."','".getftcat($fee)."','".safee($condb,$f_pro)."','".safee($condb,$flevel)."','".safee($condb,$secn)."','$Dept','$Dfac','".safee($condb,$amount)."','".safee($condb,$status)."','".safee($condb,$Cat_fee)."','".safee($condb,$Cpen)."','".safee($condb,$Penper)."'
+,'".safee($condb,$pendate)."','".safee($condb,$enddate)."','".safee($condb,$bkey)."','".safee($condb,$nbkey)."')")or die(mysqli_error($condb));
 
 mysqli_query($condb,"insert into activity_log (date,username,action) values(NOW(),'$admin_username','".getftype($fee)." for ".getprog($f_pro)." ".getlevel($flevel,$class_ID) ." was added')")or die(mysqli_error($condb)); 
 // ob_start();
@@ -70,19 +73,14 @@ message("New Fee [". getftype($fee) ."] was Successfully Added for ".getlevel($f
 						  	  <label for="heard">Fee Type</label>
                             	  <select name='fee' id="fee" class="form-control" onchange="showpcheck(this.value)" required>
                             <option value="">Select Fee</option>
-                           <!-- <option value="School fee">School fee</option>
-                            <option value="Admission Form">Admission Form</option>
-                            <option value="Departmental fee">Departmental fee</option> --!>
-						<?php 
+                          <?php 
 $resultfee = mysqli_query($condb,"SELECT * FROM ftype_db   ORDER BY f_type  ASC");
 while($rsfee = mysqli_fetch_array($resultfee)){ echo "<option value='$rsfee[id]'>$rsfee[f_type]</option>";}?>
-                        <!--    <option value="Others">Other Fees</option> -->
-                          
-                          </select>
+                      </select>
                       </div>
 <!--  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback"  > <label for="heard"  style="display: none;"  id="other2" >Other Fee Type</label> <input type="text" class="form-control " style="display: none;"  type="hidden" name='otherl' id="otherl" ></div> -->
                       
-                     <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                     <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
 						  	  <label for="heard">Program </label>
                             	  <select name='f_pro' id="f_pro" class="form-control" required>
                             <option value="">Select Program</option>
@@ -93,6 +91,16 @@ while($rsproe = mysqli_fetch_array($resultproe))
 echo "<option value='$rsproe[pro_id]'>$rsproe[Pro_name]</option>";}?>
                             
                              </select>
+                      </div>
+                      <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
+                       
+						  	  <label for="heard">Account (optional)</label>
+                            	  <select name='bkey' id="bkey" class="form-control">
+                           <option value=''>Select Account</option>
+                            <?php  $qrybank = mysqli_query($condb,"SELECT * FROM bank   ORDER BY acc_name  ASC");
+while($rsbank = mysqli_fetch_array($qrybank)){?>
+    <option value='<?php echo $rsbank['b_sort'];?>'><?php echo $rsbank['b_name']." (".$rsbank['acc_num'].")"; ?></option><?php }?>
+                          </select>
                       </div>
  <!--
   <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback" >
@@ -136,7 +144,13 @@ while($rsblocks = mysqli_fetch_array($resultblocks))
                       
                           <input type="text" class="form-control " name='amount' id="amount" onkeypress="return isNumber(event);" value=""  required="required"> </div>
                           
-                           <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
+						  	  <label for="heard">Session </label>
+                            	  <select name='sec' id="status" class="form-control" >
+                         <option value="">Select Session</option>
+<?php echo fill_sec(); ?>
+                            </select></div>
+                           <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
 						  	  <label for="heard"> Indigene Or Non Indigene </label>
                             	  <select name='cat_fee' id="cat_fee" class="form-control" >
                             <option value="">Select Category</option>
@@ -149,16 +163,11 @@ while($rsblocks = mysqli_fetch_array($resultblocks))
 						  	  <label for="heard">Level </label>
                             	  <select name='level' id="status" class="form-control" >
                             <option value="">Select Level</option>
-                      <?php 
-$resultsec2 = mysqli_query($condb,"SELECT * FROM level_db where prog = '$class_ID'  ORDER BY level_order ASC");
+                      <?php $resultsec2 = mysqli_query($condb,"SELECT * FROM level_db where prog = '$class_ID'  ORDER BY level_order ASC");
 while($rssec2 = mysqli_fetch_array($resultsec2))
-{
-echo "<option value='$rssec2[level_order]'>$rssec2[level_name]</option>";	
-}
-?>
-                            
-                             </select>
-                      </div>
+{echo "<option value='$rssec2[level_order]'>$rssec2[level_name]</option>";	}
+?></select></div>
+                       
                      <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
 						  	  <label for="heard">Fee Status </label>
                             	  <select name='status' id="status" class="form-control" >

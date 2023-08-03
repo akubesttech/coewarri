@@ -264,7 +264,7 @@ $num_rows =mysqli_num_rows($student_query);
 		while($row = mysqli_fetch_array($student_query)){
 	$feetype = $row['fee_type'];
 if(substr($feetype,0,1) == "B"){ $feet = getfeecat($row['ft_cat']);}else{ $feet = getftype($row['fee_type']);}
-				$RegNo = $row['RegNo'];
+				//$RegNo = $row['RegNo'];
 ?>
  <tr style='mso-yfti-irow:1'>
  
@@ -369,7 +369,7 @@ if(substr($feetype,0,1) == "B"){ $feet = getfeecat($row['ft_cat']);}else{ $feet 
  if($_SESSION['los'] == NULL){
 $student_query2 = mysqli_query($condb,"SELECT SUM(paid_amount) as Total FROM payment_tb  WHERE session ='".safee($condb,$_SESSION['vsession'])."' and md5(department)='".safee($condb,$_GET['Schd'])."' and pay_status ='1' ") or die(mysqli_error($condb));
 }else{ $student_query2 = mysqli_query($condb,"SELECT SUM(paid_amount) as Total FROM payment_tb  WHERE session ='".safee($condb,$_SESSION['vsession'])."' and md5(department)='".safee($condb,$_GET['Schd'])."' and pay_status ='1' and  level='".safee($condb,$_SESSION['los'])."' ") or die(mysqli_error($condb));
-} $get_inf2 = mysqli_fetch_array($student_query2); $field4 = $get_inf2["Total"];
+} $get_inf2 = mysqli_fetch_array($student_query2); $field4 = round($get_inf2["Total"],2);
  //$num_rows3 =mysqli_num_rows($student_query2); while($get_inf2 = mysqli_fetch_row($student_query2)){ foreach ($get_inf2 as $field4) ?>  
   <!--MYSQL FETCH ARRAY-->
  </tr>

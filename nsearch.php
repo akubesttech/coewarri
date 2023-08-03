@@ -44,7 +44,7 @@
        <div class="col-xs-12 primary-content link-icons">
                           <?php
                           //get number of rows
-                          $limit = 10;
+                          $limit = 3;
                           $keywords = $_GET['search'];
                            if(!empty($keywords)){
         $whereSQL = "WHERE news_title LIKE '%".$keywords."%' OR  news_content LIKE '%".$keywords."%' AND status ='TRUE' ORDER BY news_id DESC";

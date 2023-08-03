@@ -42,7 +42,8 @@ $gradepoint  =  gradpoint($recordData,$studentpro);
 //echo	$recordData ;
 if(!empty($upstate)){
 $sql20="select * from coursereg_tb where course_id ='".$coursecode."' AND sregno= '".trim($excel->sheets[0]['cells'][$x][1])."' AND session ='".$session."' AND dept = '".$depatment."' ";
-}else{$sql20="select * from student_tb where  RegNo= '".trim($excel->sheets[0]['cells'][$x][1])."' AND Department = '".$depatment."' AND verify_Data = 'TRUE' "; }
+}else{
+    $sql20="select * from student_tb where  RegNo= '".trim($excel->sheets[0]['cells'][$x][1])."' AND Department = '".$depatment."' AND verify_Data = 'TRUE' "; }
 				
                 $resultcheck = mysqli_query($condb,$sql20) or die(mysqli_error($condb));
 				if(mysqli_num_rows($resultcheck)>0)

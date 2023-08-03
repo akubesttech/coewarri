@@ -78,13 +78,13 @@ message("Incorrect Pin and Serial Number Please Try Again.", "error");
 			    			<div class="row">
 			    				<div class="col-xs-6 col-sm-6 col-md-6">
 			    					<label class="head">Pin<span class="w3l-star"> * </span></label>
-			<div class="form-group"> <input type="text" name="pin" id="pin"  class="form-control input-sm" autocomplete="off"  required="required" >
+			<div class="form-group"> <input type="text" name="pin"  id="pin" class="form-control input-sm" autocomplete="off"  required="required" >
 			    					</div></div>
 			    					
 			    				<div class="col-xs-6 col-sm-6 col-md-6">
 			    					<label class="head">Serial Number<span class="w3l-star"> * </span></label>
 			    					<div class="form-group">
-			    			<input type="text" name="serial" id="serial" required="required" class="form-control input-sm" autocomplete="off">
+			    			<input type="text" name="serial" id="serial" required="required"  class="form-control input-sm" autocomplete="off">
 			    				</div>
 			    				</div>
 			    			</div>

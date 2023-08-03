@@ -43,6 +43,9 @@ message("The sum of the Score inputs must be equal to 100", "error");
 				}elseif(!ctype_digit($Cunit)){
 				 message("Incorrect Input it should be a Digit.", "error");
 		        redirect('add_Courses.php?view=editc&id='.$get_RegNo);
+                }elseif(strpos($Ccode," ")){
+					message("Please! Course Code can not Contain a Space", "error");
+                    redirect('add_Courses.php?view=editc&id='.$get_RegNo);
 }else{
 if($level=="Others"){
 mysqli_query($condb,"update courses set dept_c = '$dept_c' ,C_title ='$Ctitle' ,C_code = '$Ccode',C_unit ='$Cunit' ,semester ='$semester' ,C_level = '$other2',fac_id='$facadd',c_cat ='".safee($condb,$coursecat)."',assmax ='".safee($condb,$amax)."',assmax2 = '".safee($condb,$amax2)."',exammax = '".safee($condb,$exmax)."' where  C_id='$get_RegNo'") or die(mysqli_error($condb));

@@ -7,7 +7,7 @@ $request = $_POST['request'];   // request
 // Get username list
 if($request == 1){
     $search = $_POST['search'];
-$query = "SELECT * FROM student_tb WHERE RegNo = '".safee($condb,$search)."' AND reg_status = '1' AND verify_Data = 'TRUE'";
+$query = "SELECT * FROM student_tb WHERE RegNo = '".safee($condb,$search)."' AND reg_status = '1' ";
     $result = mysqli_query($condb,$query);
     
     while($row = mysqli_fetch_array($result) ){

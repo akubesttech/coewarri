@@ -1,9 +1,15 @@
 <?php if(($student_level < "200") OR ($student_level > "300")){ $display = "display:none;";}else{ $display = ""; } ?>
+<?php  
+$resultsec4 = mysqli_query(Database::$conn,"SELECT level_order,level_name FROM level_db where prog = '$student_prog'  ORDER BY level_order ASC limit 1");
+$getminl = mysqli_fetch_array($resultsec4);  $getminlevel = $getminl['level_order']; 
+if($student_level > $getminlevel ){ $dis = ""; $man = "yes";}else{ $dis = "display: none;";$man = "no";}
+//echo $man." ".$student_level ." ".$getminlevel." ".$default_session; 
+?>
 <div class="x_panel">
                 
              
                 <div class="x_content">
-	                <form method="get" class="form-horizontal"  action="course_manage.php?view=l_c" enctype="multipart/form-data">
+	                <form method="get" class="form-horizontal"  action="" enctype="multipart/form-data">
                     
                       
                       <span class="section">Select Course Information </span>
@@ -27,11 +33,15 @@ echo "<option value='$rsblocks[fac_id]' selected>$rsblocks[fac_name]</option>";
                      
 <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback" style="display: none;">
 <label for="heard"><?php echo $SGdept1; ?></label>
-                            	  <select name='dept1_find' id="dept1" required="required" class="form-control" disabled >
+                            	  <select name='dept1_find' id="dept1"  class="form-control" disabled >
                            <option value='<?php echo $student_dept;?>'><?php echo getdeptc($student_dept); //$SGdept1; ?></option>
                           </select>
                       </div>
-                    
+                       <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback" style="<?php echo $dis; ?>">
+     <label for="heard">Academic Session</label>
+     <select name='session' id="session"   class="form-control">
+  <option value="">Select Session</option><?php echo fill_sec(); ?></select>
+                      </div>
                        <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
 					  <label for="heard">Level </label>
                       
@@ -53,7 +63,7 @@ echo "<option value='$rssec2[level_order]'>$rssec2[level_name]</option>";
                             <option value="">Select Semester</option>
                             <option value="First">First</option>
                             <option value="Second">Second</option>
-                            <option value="both">All</option>
+                           <!-- <option value="both">All</option>-->
                           
                           </select> </div>
                      
@@ -70,12 +80,14 @@ echo "<option value='$rssec2[level_order]'>$rssec2[level_name]</option>";
 	                                            $(document).ready(function(){
 	                                            $('#save').tooltip('show');
 	                                            $('#save').tooltip('hide');
+	                                            
 	                                            });
 	                                            </script>
-	                                            <div class='imgHolder2' id='imgHolder2'><img src='../admin/uploads/tabLoad.gif'></div>
                         </div>
                         
                       </div>
+	                                            <div class='imgHolder2' id='imgHolder2'><img src='../admin/uploads/tabLoad.gif'></div>
                     </form>
+                    </div>
                   </div>
                   

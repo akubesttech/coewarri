@@ -949,3 +949,28 @@ Are you sure you want to delete the Selected Record you checked ?
                     </div>
                   </div>
 <!-- end  Modal -->
+		<!---------------------------------- Delete exemption modal ------------------------------------------>
+    <div class="modal fade" id="feeexempt_delete" tabindex="-1" role="dialog" aria-hidden="true">
+    
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span>
+                          </button>
+                          <h4 class="modal-title" id="myModalLabel">Delete Fee Exemption?</h4>
+                        </div>
+                       <div class="modal-body">
+					<div class="alert alert-danger">
+					<p>Are you sure you want to delete the Fee Exemption  you checked? </p>
+					</div>
+					</div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-remove"></i>Close</button>
+                          <button  name="delete_fe" class="btn btn-primary"><i class="fa fa-check icon-large"></i>Yes</button>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+<!-- end  Modal -->

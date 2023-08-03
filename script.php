@@ -536,6 +536,7 @@ function tablePrint3(){
     tots += parseFloat(price);
   });
   $('#tots').text(tots.toFixed(2));
+  $('#tot2').text(tots.toFixed(2));
 }
 $(function() {
   $(document).on("change", ".uniform_on1", calc);
@@ -548,6 +549,37 @@ $(function() {
     "sPaginationType": "full_numbers"
     } );
   });  
+
+function fullpay(){  
+                var ele=document.getElementsByName('selector[]');
+                var paypanel = document.getElementById("paymain"); 
+                   var fbtn = document.getElementById("fbtn");
+                   var pbtn = document.getElementById("pbtn"); 
+                for(var i=0; i<ele.length; i++){  
+                    if(ele[i].type=='checkbox')  
+                        ele[i].checked=true;
+                         calc(); 
+                         paypanel.style.display = "block";
+                         fbtn.style.backgroundColor = "#3CB043";
+                           pbtn.style.backgroundColor = "#8EAF1B";
+                          document.getElementById('pmsg').innerHTML = "You Have Selected Full Payment Plan"; 
+                }  
+            }  
+            function partpay(){
+           var ele=document.getElementsByName('selector[]'); 
+                var paypanel = document.getElementById("paymain");
+                 var pbtn = document.getElementById("pbtn"); 
+                for(var i=0; i<ele.length; i++){  
+                    if(ele[i].type=='checkbox')  
+                        ele[i].checked=false;  
+                       calc();
+                        paypanel.style.display = "block";
+                         pbtn.style.backgroundColor = "#3CB043";
+                          //$("#payml").load(window.location.href + " #payml" );
+                       } 
+                      location.reload(); 
+                  document.getElementById('pmsg').innerHTML = "You Have Selected Part Payment Plan";
+            }             
 
 
 						</script>

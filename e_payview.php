@@ -9,6 +9,7 @@ $paystatus12=mysqli_num_rows($paystatus1);
 $dform_get2 = mysqli_fetch_assoc($paystatus1); $ftranid = $dform_get2['trans_id']; $sname = $dform_get2['FirstName'];$fname = $dform_get2['SecondName']; $oname = $dform_get2['Othername']; $fullname = $sname." ".$fname." ".$oname; $appNo = $dform_get2['appNo']; $feename = $dform_get2['ft_cat'];
 $femail = $dform_get2['email']; $fphone = $dform_get2['phone']; $fprog = $dform_get2['prog'];$fsession = $dform_get2['session']; $pamount = $dform_get2['paid_amount']; $matno = $dform_get2['stud_reg'];
 $feetp = $dform_get2['fee_type']; $famount  = $dform_get2['dueamount'];  $Pmode  = $dform_get2['pay_mode'];
+$plev  = $dform_get2['level']; $st_cat  = $dform_get2['stud_cat'];
 $date20 = str_replace('/', '-', $dform_get2['pay_date'] );  $newDate20 = date("Y-m-d", strtotime($date20));
    $timestamp = strtotime($newDate20); $datetime	= date('l, jS F Y', $timestamp);
 $paycomponent=mysqli_query($condb,"SELECT * FROM feecomp_tb  WHERE Batchno ='".safee($condb,$feetp)."' "); $serial=1;
@@ -88,6 +89,10 @@ $paycomponent=mysqli_query($condb,"SELECT * FROM feecomp_tb  WHERE Batchno ='".s
             <input type='hidden' name='ft_cat' value='<?php echo $feename;?>' />
             <input type='hidden' name='matno' value='<?php echo $payuse;?>' />
             <input type='hidden' name='sec' value='<?php echo $fsession;?>' />
+             <input type='hidden' name='progM' value='<?php echo $fprog;?>' /> 
+               <input type='hidden' name='lev' value='<?php echo $plev;?>' />
+               <input type='hidden' name='st_cat' value='<?php echo $st_cat;?>' />
+               
 			<div class="form_box">
 			 <div class="clear" style="overflow: auto;">
         <table  border="1"><?php if(!empty($matno)){ ?>
@@ -122,8 +127,15 @@ $paycomponent=mysqli_query($condb,"SELECT * FROM feecomp_tb  WHERE Batchno ='".s
 <tr class="row2" style="text-align: center;"> <th>S/N</th> <th colspan="2">ITEM</th> <th>Description</th> <th >Amount</th> </tr>
 <?php  while($row_utme = mysqli_fetch_array($paycomponent)){ $ftypecon = $row_utme['feetype']; $amount = $row_utme['f_amount'];
 $paysession = $row_utme['session']; $feecategory = $row_utme['fcat']; $penalty = $row_utme['penalty']; if($penalty > 0){ $pens = " ( penalty inclusive).";}else{ $pens ="";} ?>
- <tr class="row1" style="text-align: center;"> <td><?php echo $serial++ ; ?></td> <td colspan="2"><?php echo getftype($ftypecon) ;?></td> <td><?php echo "Payment Of " .getftype($ftypecon).$pens ;?><?php //echo getfeecat($feecategory).$pens ;?> </td> <td><?php echo " ".number_format($amount,2); ?>  </td> </tr>
+ <tr class="row1" style="text-align: center;display: none;"> <td><?php echo $serial++ ; ?></td> <td colspan="2"><?php echo getftype($ftypecon) ;?></td> 
+ <td><?php echo "Payment Of " .getftype($ftypecon).$pens ;?><?php //echo getfeecat($feecategory).$pens ;?> </td> 
+ <td><?php echo " ".number_format($amount,2); ?>  </td> </tr>
    <?php	}  ?>
+   
+   <tr class="row1" style="text-align: center;"> <td><?php echo "1" ; ?></td> <td colspan="2"><?php echo getfeecat($feecategory) ;?></td> 
+ <td><?php echo "Payment Of " .getfeecat($feecategory).$pens ;?><?php //echo getfeecat($feecategory).$pens ;?> </td> 
+ <td><?php echo " ".number_format($famount,2); ?>  </td> </tr>
+   
 <tr class="row2" style="text-align: center;">
   <td width="20%" colspan="3" height="20"><strong> </strong></td>
   <td width="20%" colspan="1" height="20"><strong> Total:</strong></td>
